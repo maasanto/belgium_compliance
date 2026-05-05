@@ -13,7 +13,7 @@ required_apps = ["erpnext"]
 
 # Installation
 # ------------
-# after_install = "belgium_compliance.install.after_install"
+after_install = "belgium_compliance.install.after_install"
 
 # Fixtures
 # --------

@@ -24,6 +24,8 @@ RC_DEDUCTIBLE_ACCOUNT_NAME = "BE RC VAT Deductible Test"
 
 def ensure_belgian_company() -> str:
 	"""Create the test Belgian company once. Returns the company name."""
+	_ensure_fixtures_loaded()
+
 	if frappe.db.exists("Company", TEST_COMPANY):
 		return TEST_COMPANY
 
@@ -43,6 +45,19 @@ def ensure_belgian_company() -> str:
 	company.insert()
 	_ensure_company_address(company.name)
 	return company.name
+
+
+def _ensure_fixtures_loaded() -> None:
+	"""Make sure the shipped catalogue fixtures are present.
+
+	`bench install-app` is supposed to run our `after_install` hook (which
+	loads them), but on some CI flows the hook may have been bypassed (e.g.
+	`--no-setup-wizard`) — re-running here is cheap and idempotent.
+	"""
+	if frappe.db.count("Belgian VAT Tax Definition") == 0:
+		from belgium_compliance.install import load_fixtures
+
+		load_fixtures()
 
 
 def _ensure_erpnext_prereqs() -> None:
