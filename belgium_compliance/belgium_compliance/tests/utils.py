@@ -46,15 +46,27 @@ def ensure_belgian_company() -> str:
 
 
 def _ensure_erpnext_prereqs() -> None:
-	"""Pre-create ERPNext masters that the Company controller's on_update step
-	links to. On a freshly installed test site without the setup wizard,
-	these aren't loaded automatically and Company.insert() fails with
-	LinkValidationError on Warehouse Type: Transit."""
+	"""Pre-create ERPNext masters that Company / Address controllers' on_update
+	steps depend on. On a freshly installed test site without the setup wizard,
+	these aren't loaded automatically and the inserts fail with
+	LinkValidationError or "No default Address Template found"."""
 	for warehouse_type in ("Transit",):
 		if not frappe.db.exists("Warehouse Type", warehouse_type):
 			doc = frappe.get_doc({"doctype": "Warehouse Type", "name": warehouse_type})
 			doc.flags.ignore_permissions = True
 			doc.insert()
+
+	if not frappe.db.exists("Address Template", {"is_default": 1}):
+		doc = frappe.get_doc(
+			{
+				"doctype": "Address Template",
+				"country": "Belgium",
+				"is_default": 1,
+				"template": "{{ address_line1 }}<br>{{ city }} {{ pincode }}<br>{{ country }}",
+			}
+		)
+		doc.flags.ignore_permissions = True
+		doc.insert()
 
 
 def ensure_vat_settings() -> str:
