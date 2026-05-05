@@ -31,6 +31,15 @@ class TestMaterialise(FrappeTestCase):
 		before_sales = frappe.db.count("Sales Taxes and Charges Template", {"company": TEST_COMPANY})
 		before_purchase = frappe.db.count("Purchase Taxes and Charges Template", {"company": TEST_COMPANY})
 
+		# Debug: confirm fixtures are visible from this test's transaction context.
+		bvtd_count = frappe.db.count("Belgian VAT Tax Definition")
+		bvtd_names = frappe.get_all("Belgian VAT Tax Definition", pluck="name")
+		print(
+			f"DEBUG materialise: count={bvtd_count}, get_all len={len(bvtd_names)}, "
+			f"sample={bvtd_names[:3]}, user={frappe.session.user}",
+			flush=True,
+		)
+
 		result = materialise_for_company(TEST_COMPANY, dry_run=1)
 
 		self.assertEqual(result["dry_run"], True)
