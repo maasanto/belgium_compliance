@@ -27,6 +27,8 @@ def ensure_belgian_company() -> str:
 	if frappe.db.exists("Company", TEST_COMPANY):
 		return TEST_COMPANY
 
+	_ensure_erpnext_prereqs()
+
 	company = frappe.get_doc(
 		{
 			"doctype": "Company",
@@ -41,6 +43,18 @@ def ensure_belgian_company() -> str:
 	company.insert()
 	_ensure_company_address(company.name)
 	return company.name
+
+
+def _ensure_erpnext_prereqs() -> None:
+	"""Pre-create ERPNext masters that the Company controller's on_update step
+	links to. On a freshly installed test site without the setup wizard,
+	these aren't loaded automatically and Company.insert() fails with
+	LinkValidationError on Warehouse Type: Transit."""
+	for warehouse_type in ("Transit",):
+		if not frappe.db.exists("Warehouse Type", warehouse_type):
+			doc = frappe.get_doc({"doctype": "Warehouse Type", "name": warehouse_type})
+			doc.flags.ignore_permissions = True
+			doc.insert()
 
 
 def ensure_vat_settings() -> str:
