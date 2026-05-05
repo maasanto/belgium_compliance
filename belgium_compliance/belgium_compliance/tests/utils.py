@@ -51,13 +51,16 @@ def _ensure_fixtures_loaded() -> None:
 	"""Make sure the shipped catalogue fixtures are present.
 
 	`bench install-app` is supposed to run our `after_install` hook (which
-	loads them), but on some CI flows the hook may have been bypassed (e.g.
-	`--no-setup-wizard`) — re-running here is cheap and idempotent.
+	loads them), but on some CI flows the hook may have been bypassed.
+	Always force-load — `load_fixtures` itself skips records that already
+	exist, so this is idempotent.
 	"""
-	if frappe.db.count("Belgian VAT Tax Definition") == 0:
-		from belgium_compliance.install import load_fixtures
+	from belgium_compliance.install import load_fixtures
 
-		load_fixtures()
+	load_fixtures()
+	count = frappe.db.count("Belgian VAT Tax Definition")
+	if count == 0:
+		raise RuntimeError(f"Fixtures failed to load — Belgian VAT Tax Definition count = {count}")
 
 
 def _ensure_erpnext_prereqs() -> None:
