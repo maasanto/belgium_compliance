@@ -1,0 +1,138 @@
+name: Server Tests
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+  workflow_dispatch:
+
+concurrency:
+  group: server-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+
+    services:
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MARIADB_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=5s --health-timeout=2s --health-retries=10
+
+      redis-cache:
+        image: redis:alpine
+        ports:
+          - 13000:6379
+      redis-queue:
+        image: redis:alpine
+        ports:
+          - 11000:6379
+
+    steps:
+      - name: Clone belgium_compliance
+        uses: actions/checkout@v4
+        with:
+          path: belgium_compliance
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            mariadb-client \
+            libmariadb-dev \
+            libmariadb-dev-compat \
+            libxml2-dev \
+            libxslt1-dev \
+            libffi-dev \
+            wkhtmltopdf
+          sudo npm install -g yarn
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('belgium_compliance/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Frappe bench
+        run: |
+          pip install --upgrade pip
+          pip install frappe-bench
+
+      - name: Init bench (Frappe v15)
+        run: |
+          bench init --skip-redis-config-generation --frappe-branch version-15 frappe-bench
+
+      - name: Configure bench services
+        working-directory: frappe-bench
+        run: |
+          bench set-config -g db_host 127.0.0.1
+          bench set-config -g redis_cache redis://127.0.0.1:13000
+          bench set-config -g redis_queue redis://127.0.0.1:11000
+          bench set-config -g redis_socketio redis://127.0.0.1:11000
+          sed -i 's|^web:.*|# web: skipped|' Procfile || true
+
+      - name: Wait for MariaDB
+        run: |
+          for i in {1..30}; do
+            if mariadb-admin ping -h 127.0.0.1 -uroot -proot --silent; then
+              echo "MariaDB is up"; exit 0
+            fi
+            sleep 2
+          done
+          echo "MariaDB did not come up in time"; exit 1
+
+      - name: Get ERPNext
+        working-directory: frappe-bench
+        run: |
+          bench get-app erpnext --branch version-15
+
+      - name: Install belgium_compliance from checked-out source
+        working-directory: frappe-bench
+        run: |
+          bench get-app belgium_compliance "${GITHUB_WORKSPACE}/belgium_compliance"
+
+      - name: Create test site
+        working-directory: frappe-bench
+        run: |
+          bench new-site test_site \
+            --mariadb-root-password root \
+            --admin-password admin \
+            --no-mariadb-socket \
+            --install-app erpnext
+          bench --site test_site install-app belgium_compliance
+          bench --site test_site set-config developer_mode 1
+          bench --site test_site set-config allow_tests 1
+
+      - name: Run tests
+        working-directory: frappe-bench
+        run: |
+          bench --site test_site run-tests --app belgium_compliance --coverage
+
+      - name: Upload coverage to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v4
+        with:
+          files: frappe-bench/sites/coverage.xml
+          flags: server
+          fail_ci_if_error: false
