@@ -1,0 +1,139 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 0,
+ "autoname": "field:code",
+ "creation": "2026-04-30 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "code",
+  "title",
+  "direction",
+  "column_break_1",
+  "rate",
+  "tax_type",
+  "section_break_2",
+  "description",
+  "section_break_3",
+  "grid_tags"
+ ],
+ "fields": [
+  {
+   "fieldname": "code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Code",
+   "reqd": 1,
+   "unique": 1,
+   "description": "Stable identifier ported from Odoo (e.g. l10n_be_vat_tax_21_goods, l10n_be_vat_tax_intra_eu_b2b_services)."
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1,
+   "translatable": 1
+  },
+  {
+   "fieldname": "direction",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Direction",
+   "options": "Sales\nPurchase",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "Rate",
+   "reqd": 1,
+   "description": "Effective rate applied to the base. Reverse-charge entries use rate 0 here and the reverse-charge logic is encoded in the grid tags."
+  },
+  {
+   "fieldname": "tax_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tax Type",
+   "options": "Standard\nReduced\nIntermediate\nZero\nExempt\nReverse Charge Domestic\nReverse Charge EU\nIntra-EU Acquisition\nImport\nExport",
+   "reqd": 1,
+   "description": "Categorisation used by the company-setup routine to materialise this definition into a Sales/Purchase Taxes and Charges Template against the correct VAT account."
+  },
+  {
+   "fieldname": "section_break_2",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Description",
+   "translatable": 1
+  },
+  {
+   "fieldname": "section_break_3",
+   "fieldtype": "Section Break",
+   "label": "Grid Mapping"
+  },
+  {
+   "fieldname": "grid_tags",
+   "fieldtype": "Table",
+   "label": "Grid Tags",
+   "options": "Belgian VAT Grid Tag",
+   "reqd": 1,
+   "description": "INTERVAT grids that this tax contributes to. Typically four rows (base/tax × invoice/refund), one per resulting grid contribution."
+  }
+ ],
+ "links": [],
+ "modified": "2026-04-30 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Belgium Compliance",
+ "name": "Belgian VAT Tax Definition",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "code",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1
+}

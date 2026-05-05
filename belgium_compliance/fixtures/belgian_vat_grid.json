@@ -1,0 +1,304 @@
+[
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "00",
+  "label": "Opérations soumises à un régime particulier",
+  "cadre": "II",
+  "is_total": 0,
+  "sort_order": 100,
+  "description": "Ventes au taux 0% et opérations sous régime particulier (ex. tabac, presse).",
+  "name": "00"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "01",
+  "label": "Opérations à 6%",
+  "cadre": "II",
+  "is_total": 0,
+  "sort_order": 110,
+  "description": "Base d'imposition des opérations à la sortie soumises au taux réduit de 6%.",
+  "name": "01"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "02",
+  "label": "Opérations à 12%",
+  "cadre": "II",
+  "is_total": 0,
+  "sort_order": 120,
+  "description": "Base d'imposition des opérations à la sortie soumises au taux intermédiaire de 12%.",
+  "name": "02"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "03",
+  "label": "Opérations à 21%",
+  "cadre": "II",
+  "is_total": 0,
+  "sort_order": 130,
+  "description": "Base d'imposition des opérations à la sortie soumises au taux normal de 21%.",
+  "name": "03"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "44",
+  "label": "Services pour lesquels la TVA est due par le preneur de services établi dans un autre État membre",
+  "cadre": "II",
+  "is_total": 0,
+  "sort_order": 200,
+  "description": "Prestations de services intracommunautaires B2B avec autoliquidation par le preneur (art. 21 §2).",
+  "name": "44"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "45",
+  "label": "Opérations pour lesquelles la TVA est due par le cocontractant",
+  "cadre": "II",
+  "is_total": 0,
+  "sort_order": 210,
+  "description": "Opérations soumises au cocontractant (autoliquidation domestique : travaux immobiliers, etc.).",
+  "name": "45"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "46L",
+  "label": "Livraisons intracommunautaires exemptées",
+  "cadre": "II",
+  "is_total": 0,
+  "sort_order": 220,
+  "description": "Livraisons intracommunautaires de biens exemptées (art. 39bis).",
+  "name": "46L"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "46T",
+  "label": "Ventes triangulaires intracommunautaires",
+  "cadre": "II",
+  "is_total": 0,
+  "sort_order": 230,
+  "description": "Opérations triangulaires intracommunautaires (acheteur revendeur en simplification).",
+  "name": "46T"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "47",
+  "label": "Autres opérations exemptées et autres opérations effectuées à l'étranger",
+  "cadre": "II",
+  "is_total": 0,
+  "sort_order": 240,
+  "description": "Exportations hors UE et autres opérations exemptées avec droit à déduction.",
+  "name": "47"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "48",
+  "label": "Notes de crédit émises et corrections négatives concernant les opérations des grilles 44 et 46",
+  "cadre": "II",
+  "is_total": 0,
+  "sort_order": 250,
+  "description": "Réductions sur opérations intracommunautaires sortantes.",
+  "name": "48"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "49",
+  "label": "Notes de crédit émises et corrections négatives concernant les autres opérations du cadre II",
+  "cadre": "II",
+  "is_total": 0,
+  "sort_order": 260,
+  "description": "Réductions sur opérations domestiques sortantes (grilles 00, 01, 02, 03, 45, 47).",
+  "name": "49"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "81",
+  "label": "Matières, matières premières, marchandises",
+  "cadre": "III",
+  "is_total": 0,
+  "sort_order": 300,
+  "description": "Base d'imposition des achats de biens destinés à la revente ou à la production.",
+  "name": "81"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "82",
+  "label": "Services et biens divers",
+  "cadre": "III",
+  "is_total": 0,
+  "sort_order": 310,
+  "description": "Base d'imposition des achats de services et biens divers (frais généraux).",
+  "name": "82"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "83",
+  "label": "Biens d'investissement",
+  "cadre": "III",
+  "is_total": 0,
+  "sort_order": 320,
+  "description": "Base d'imposition des achats de biens d'investissement (immobilisations).",
+  "name": "83"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "84",
+  "label": "Notes de crédit reçues et corrections négatives concernant les opérations des grilles 86 et 88",
+  "cadre": "III",
+  "is_total": 0,
+  "sort_order": 330,
+  "description": "Réductions sur acquisitions intracommunautaires entrantes.",
+  "name": "84"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "85",
+  "label": "Notes de crédit reçues et corrections négatives concernant les autres opérations du cadre III",
+  "cadre": "III",
+  "is_total": 0,
+  "sort_order": 340,
+  "description": "Réductions sur achats domestiques entrants (grilles 81, 82, 83, 87).",
+  "name": "85"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "86",
+  "label": "Acquisitions intracommunautaires effectuées en Belgique",
+  "cadre": "III",
+  "is_total": 0,
+  "sort_order": 350,
+  "description": "Acquisitions intracommunautaires de biens, base d'imposition pour autoliquidation.",
+  "name": "86"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "87",
+  "label": "Autres opérations à l'entrée pour lesquelles la TVA est due par le déclarant",
+  "cadre": "III",
+  "is_total": 0,
+  "sort_order": 360,
+  "description": "Achats avec autoliquidation domestique (cocontractant) et importations avec report.",
+  "name": "87"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "88",
+  "label": "Services intracommunautaires effectués par un assujetti établi dans un autre État membre",
+  "cadre": "III",
+  "is_total": 0,
+  "sort_order": 370,
+  "description": "Prestations de services intracommunautaires entrantes B2B avec autoliquidation.",
+  "name": "88"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "54",
+  "label": "TVA relative aux opérations déclarées dans les grilles 01, 02 et 03",
+  "cadre": "IV",
+  "is_total": 0,
+  "sort_order": 400,
+  "description": "TVA collectée sur ventes domestiques aux taux 6%, 12%, 21%.",
+  "name": "54"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "55",
+  "label": "TVA relative aux opérations déclarées dans les grilles 86 et 88",
+  "cadre": "IV",
+  "is_total": 0,
+  "sort_order": 410,
+  "description": "TVA due par autoliquidation sur acquisitions intra-UE et services intra-UE reçus.",
+  "name": "55"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "56",
+  "label": "TVA relative aux opérations déclarées dans la grille 87, à l'exception des importations avec report",
+  "cadre": "IV",
+  "is_total": 0,
+  "sort_order": 420,
+  "description": "TVA due par autoliquidation domestique (cocontractant) hors importations.",
+  "name": "56"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "57",
+  "label": "TVA relative aux importations avec report de perception",
+  "cadre": "IV",
+  "is_total": 0,
+  "sort_order": 430,
+  "description": "TVA due sur importations sous régime de report (autorisation ET 14000).",
+  "name": "57"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "61",
+  "label": "Diverses régularisations TVA en faveur de l'État",
+  "cadre": "IV",
+  "is_total": 0,
+  "sort_order": 440,
+  "description": "Régularisations en faveur du Trésor (ajustements positifs de TVA due).",
+  "name": "61"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "63",
+  "label": "TVA à reverser mentionnée sur les notes de crédit reçues",
+  "cadre": "IV",
+  "is_total": 0,
+  "sort_order": 450,
+  "description": "TVA à reverser sur notes de crédit reçues des fournisseurs (annule la déduction).",
+  "name": "63"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "59",
+  "label": "TVA déductible",
+  "cadre": "V",
+  "is_total": 0,
+  "sort_order": 500,
+  "description": "TVA en amont déductible sur achats.",
+  "name": "59"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "62",
+  "label": "Diverses régularisations TVA en faveur du déclarant",
+  "cadre": "V",
+  "is_total": 0,
+  "sort_order": 510,
+  "description": "Régularisations en faveur de l'assujetti (ajustements positifs de TVA déductible).",
+  "name": "62"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "64",
+  "label": "TVA récupérable mentionnée sur les notes de crédit émises",
+  "cadre": "V",
+  "is_total": 0,
+  "sort_order": 520,
+  "description": "TVA récupérable sur notes de crédit émises aux clients (annule la collecte).",
+  "name": "64"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "71",
+  "label": "Taxe due à l'État",
+  "cadre": "VI",
+  "is_total": 1,
+  "formula": "max(0, g54 + g55 + g56 + g57 + g61 + g63 - g59 - g62 - g64)",
+  "sort_order": 600,
+  "description": "Solde à payer (positif) : grilles IV moins grilles V.",
+  "name": "71"
+ },
+ {
+  "doctype": "Belgian VAT Grid",
+  "code": "72",
+  "label": "Sommes dues par l'État",
+  "cadre": "VI",
+  "is_total": 1,
+  "formula": "max(0, g59 + g62 + g64 - g54 - g55 - g56 - g57 - g61 - g63)",
+  "sort_order": 610,
+  "description": "Solde à récupérer (positif) : grilles V moins grilles IV.",
+  "name": "72"
+ }
+]

@@ -1,0 +1,3056 @@
+[
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_sales_21_goods",
+  "title": "TVA 21% — Ventes de biens",
+  "direction": "Sales",
+  "rate": 21.0,
+  "tax_type": "Standard",
+  "description": "Standard 21% VAT on domestic sales of goods.",
+  "grid_tags": [
+   {
+    "grid": "03",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "54",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "49",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "64",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_sales_21_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_sales_06",
+  "title": "TVA 6% — Ventes",
+  "direction": "Sales",
+  "rate": 6.0,
+  "tax_type": "Reduced",
+  "description": "Reduced 6% VAT on domestic sales (food, books, water, medicine, transport, etc.).",
+  "grid_tags": [
+   {
+    "grid": "01",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "54",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "49",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "64",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_sales_06"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_21_goods",
+  "title": "TVA 21% — Achats de biens",
+  "direction": "Purchase",
+  "rate": 21.0,
+  "tax_type": "Standard",
+  "description": "Standard 21% VAT on domestic purchases of goods (raw materials / merchandise).",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "63",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_21_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_acquisition_goods",
+  "title": "Acquisition intracommunautaire de biens (autoliquidation 21%)",
+  "direction": "Purchase",
+  "rate": 21.0,
+  "tax_type": "Intra-EU Acquisition",
+  "description": "Reverse-charge VAT on intra-EU acquisition of goods. The base is reported in both 86 (intra-EU acquisitions, informational) and 81 (raw materials/merchandise). The autoliquidated VAT hits both 55 (tax due) and 59 (tax deductible) when the acquisition is fully deductible.",
+  "grid_tags": [
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "55",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_acquisition_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_b2b_services_in",
+  "title": "Services intracommunautaires reçus B2B (autoliquidation 21%)",
+  "direction": "Purchase",
+  "rate": 21.0,
+  "tax_type": "Reverse Charge EU",
+  "description": "Reverse-charge VAT on intra-EU B2B services received. Base reported in both 88 (intra-EU services) and 82 (services). VAT hits 55 (due) and 59 (deductible).",
+  "grid_tags": [
+   {
+    "grid": "88",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "55",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_b2b_services_in"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_supplies",
+  "title": "Livraisons intracommunautaires (exemptées art. 39bis)",
+  "direction": "Sales",
+  "rate": 0.0,
+  "tax_type": "Zero",
+  "description": "Exempt intra-EU supplies of goods to a VAT-registered customer in another EU member state. Reported as exempt; the customer self-assesses VAT in their country.",
+  "grid_tags": [
+   {
+    "grid": "46L",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "48",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_supplies"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_export",
+  "title": "Exportations hors UE (exemptées art. 39)",
+  "direction": "Sales",
+  "rate": 0.0,
+  "tax_type": "Export",
+  "description": "Exempt sales of goods exported outside the EU.",
+  "grid_tags": [
+   {
+    "grid": "47",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "49",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_export"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_sales_21_services",
+  "title": "TVA 21% — Ventes de services",
+  "direction": "Sales",
+  "rate": 21.0,
+  "tax_type": "Standard",
+  "description": "TVA standard 21% sur ventes domestiques de services.",
+  "grid_tags": [
+   {
+    "grid": "03",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "54",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "49",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "64",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_sales_21_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_sales_12_services",
+  "title": "TVA 12% — Ventes de services",
+  "direction": "Sales",
+  "rate": 12.0,
+  "tax_type": "Intermediate",
+  "description": "TVA intermédiaire 12% sur ventes domestiques de services (HORECA, certains travaux immobiliers).",
+  "grid_tags": [
+   {
+    "grid": "02",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "54",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "49",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "64",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_sales_12_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_sales_12_goods",
+  "title": "TVA 12% — Ventes de biens",
+  "direction": "Sales",
+  "rate": 12.0,
+  "tax_type": "Intermediate",
+  "description": "TVA intermédiaire 12% sur ventes domestiques de biens.",
+  "grid_tags": [
+   {
+    "grid": "02",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "54",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "49",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "64",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_sales_12_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_sales_06_services",
+  "title": "TVA 6% — Ventes de services",
+  "direction": "Sales",
+  "rate": 6.0,
+  "tax_type": "Reduced",
+  "description": "TVA réduite 6% sur ventes domestiques de services (transport, spectacles, etc.).",
+  "grid_tags": [
+   {
+    "grid": "01",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "54",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "49",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "64",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_sales_06_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_sales_00_services",
+  "title": "TVA 0% — Ventes de services exonérées",
+  "direction": "Sales",
+  "rate": 0.0,
+  "tax_type": "Zero",
+  "description": "Ventes domestiques de services exonérées (régime particulier).",
+  "grid_tags": [
+   {
+    "grid": "00",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "49",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_sales_00_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_sales_00_goods",
+  "title": "TVA 0% — Ventes de biens exonérées",
+  "direction": "Sales",
+  "rate": 0.0,
+  "tax_type": "Zero",
+  "description": "Ventes domestiques de biens exonérées (régime particulier, grille 00).",
+  "grid_tags": [
+   {
+    "grid": "00",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "49",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_sales_00_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_sales_reverse_charge_domestic",
+  "title": "TVA 0% — Ventes en autoliquidation domestique (cocontractant)",
+  "direction": "Sales",
+  "rate": 0.0,
+  "tax_type": "Reverse Charge Domestic",
+  "description": "Ventes domestiques avec TVA due par le cocontractant (article 20 §1 AR n°1). Reportées en grille 45 ; aucune TVA facturée.",
+  "grid_tags": [
+   {
+    "grid": "45",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "49",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_sales_reverse_charge_domestic"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_sales_eu_services",
+  "title": "TVA 0% — Services intracommunautaires B2B fournis",
+  "direction": "Sales",
+  "rate": 0.0,
+  "tax_type": "Zero",
+  "description": "Services intracommunautaires B2B exonérés (article 21 §2). Le client UE auto-liquide la TVA dans son pays.",
+  "grid_tags": [
+   {
+    "grid": "44",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "48",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_sales_eu_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_sales_eu_abc_triangular",
+  "title": "TVA 0% — Ventes triangulaires intracommunautaires",
+  "direction": "Sales",
+  "rate": 0.0,
+  "tax_type": "Zero",
+  "description": "Ventes ABC en simplification triangulaire (article 25ter). Reportées en grille 46T.",
+  "grid_tags": [
+   {
+    "grid": "46T",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "48",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_sales_eu_abc_triangular"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_12_goods",
+  "title": "TVA 12% — Achats de biens",
+  "direction": "Purchase",
+  "rate": 12.0,
+  "tax_type": "Intermediate",
+  "description": "TVA domestique 12% à l'achat de biens (matières premières / marchandises, grille 81).",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "63",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_12_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_06_goods",
+  "title": "TVA 6% — Achats de biens",
+  "direction": "Purchase",
+  "rate": 6.0,
+  "tax_type": "Reduced",
+  "description": "TVA domestique 6% à l'achat de biens (matières premières / marchandises, grille 81).",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "63",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_06_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_00_goods",
+  "title": "TVA 0% — Achats de biens",
+  "direction": "Purchase",
+  "rate": 0.0,
+  "tax_type": "Zero",
+  "description": "TVA domestique 0% à l'achat de biens (matières premières / marchandises, grille 81).",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_00_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_21_services",
+  "title": "TVA 21% — Achats de services",
+  "direction": "Purchase",
+  "rate": 21.0,
+  "tax_type": "Standard",
+  "description": "TVA domestique 21% à l'achat de services et biens divers (grille 82).",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "63",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_21_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_12_services",
+  "title": "TVA 12% — Achats de services",
+  "direction": "Purchase",
+  "rate": 12.0,
+  "tax_type": "Intermediate",
+  "description": "TVA domestique 12% à l'achat de services et biens divers (grille 82).",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "63",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_12_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_06_services",
+  "title": "TVA 6% — Achats de services",
+  "direction": "Purchase",
+  "rate": 6.0,
+  "tax_type": "Reduced",
+  "description": "TVA domestique 6% à l'achat de services et biens divers (grille 82).",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "63",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_06_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_00_services",
+  "title": "TVA 0% — Achats de services",
+  "direction": "Purchase",
+  "rate": 0.0,
+  "tax_type": "Zero",
+  "description": "TVA domestique 0% à l'achat de services et biens divers (grille 82).",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_00_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_21_investment",
+  "title": "TVA 21% — Achats de biens d'investissement",
+  "direction": "Purchase",
+  "rate": 21.0,
+  "tax_type": "Standard",
+  "description": "TVA domestique 21% à l'achat de biens d'investissement (grille 83).",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "63",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_21_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_12_investment",
+  "title": "TVA 12% — Achats de biens d'investissement",
+  "direction": "Purchase",
+  "rate": 12.0,
+  "tax_type": "Intermediate",
+  "description": "TVA domestique 12% à l'achat de biens d'investissement (grille 83).",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "63",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_12_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_06_investment",
+  "title": "TVA 6% — Achats de biens d'investissement",
+  "direction": "Purchase",
+  "rate": 6.0,
+  "tax_type": "Reduced",
+  "description": "TVA domestique 6% à l'achat de biens d'investissement (grille 83).",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "63",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_06_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_00_investment",
+  "title": "TVA 0% — Achats de biens d'investissement",
+  "direction": "Purchase",
+  "rate": 0.0,
+  "tax_type": "Zero",
+  "description": "TVA domestique 0% à l'achat de biens d'investissement (grille 83).",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_00_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_reverse_charge_domestic_21_goods",
+  "title": "TVA 21% — Achats biens en autoliquidation domestique",
+  "direction": "Purchase",
+  "rate": 21.0,
+  "tax_type": "Reverse Charge Domestic",
+  "description": "Achats domestiques avec autoliquidation de la TVA par le preneur (cocontractant, grille 87). La TVA 21% alimente simultanément les grilles 56 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "56",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_reverse_charge_domestic_21_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_reverse_charge_domestic_12_goods",
+  "title": "TVA 12% — Achats biens en autoliquidation domestique",
+  "direction": "Purchase",
+  "rate": 12.0,
+  "tax_type": "Reverse Charge Domestic",
+  "description": "Achats domestiques avec autoliquidation de la TVA par le preneur (cocontractant, grille 87). La TVA 12% alimente simultanément les grilles 56 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "56",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_reverse_charge_domestic_12_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_reverse_charge_domestic_06_goods",
+  "title": "TVA 6% — Achats biens en autoliquidation domestique",
+  "direction": "Purchase",
+  "rate": 6.0,
+  "tax_type": "Reverse Charge Domestic",
+  "description": "Achats domestiques avec autoliquidation de la TVA par le preneur (cocontractant, grille 87). La TVA 6% alimente simultanément les grilles 56 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "56",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_reverse_charge_domestic_06_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_reverse_charge_domestic_00_goods",
+  "title": "TVA 0% — Achats biens en autoliquidation domestique",
+  "direction": "Purchase",
+  "rate": 0.0,
+  "tax_type": "Reverse Charge Domestic",
+  "description": "Achats domestiques avec autoliquidation de la TVA par le preneur (cocontractant, grille 87). La TVA 0% alimente simultanément les grilles 56 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_reverse_charge_domestic_00_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_reverse_charge_domestic_21_services",
+  "title": "TVA 21% — Achats services en autoliquidation domestique",
+  "direction": "Purchase",
+  "rate": 21.0,
+  "tax_type": "Reverse Charge Domestic",
+  "description": "Achats domestiques avec autoliquidation de la TVA par le preneur (cocontractant, grille 87). La TVA 21% alimente simultanément les grilles 56 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "56",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_reverse_charge_domestic_21_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_reverse_charge_domestic_12_services",
+  "title": "TVA 12% — Achats services en autoliquidation domestique",
+  "direction": "Purchase",
+  "rate": 12.0,
+  "tax_type": "Reverse Charge Domestic",
+  "description": "Achats domestiques avec autoliquidation de la TVA par le preneur (cocontractant, grille 87). La TVA 12% alimente simultanément les grilles 56 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "56",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_reverse_charge_domestic_12_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_reverse_charge_domestic_06_services",
+  "title": "TVA 6% — Achats services en autoliquidation domestique",
+  "direction": "Purchase",
+  "rate": 6.0,
+  "tax_type": "Reverse Charge Domestic",
+  "description": "Achats domestiques avec autoliquidation de la TVA par le preneur (cocontractant, grille 87). La TVA 6% alimente simultanément les grilles 56 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "56",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_reverse_charge_domestic_06_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_reverse_charge_domestic_00_services",
+  "title": "TVA 0% — Achats services en autoliquidation domestique",
+  "direction": "Purchase",
+  "rate": 0.0,
+  "tax_type": "Reverse Charge Domestic",
+  "description": "Achats domestiques avec autoliquidation de la TVA par le preneur (cocontractant, grille 87). La TVA 0% alimente simultanément les grilles 56 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_reverse_charge_domestic_00_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_reverse_charge_domestic_21_investment",
+  "title": "TVA 21% — Achats biens d'investissement en autoliquidation domestique",
+  "direction": "Purchase",
+  "rate": 21.0,
+  "tax_type": "Reverse Charge Domestic",
+  "description": "Achats domestiques avec autoliquidation de la TVA par le preneur (cocontractant, grille 87). La TVA 21% alimente simultanément les grilles 56 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "56",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_reverse_charge_domestic_21_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_reverse_charge_domestic_12_investment",
+  "title": "TVA 12% — Achats biens d'investissement en autoliquidation domestique",
+  "direction": "Purchase",
+  "rate": 12.0,
+  "tax_type": "Reverse Charge Domestic",
+  "description": "Achats domestiques avec autoliquidation de la TVA par le preneur (cocontractant, grille 87). La TVA 12% alimente simultanément les grilles 56 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "56",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_reverse_charge_domestic_12_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_reverse_charge_domestic_06_investment",
+  "title": "TVA 6% — Achats biens d'investissement en autoliquidation domestique",
+  "direction": "Purchase",
+  "rate": 6.0,
+  "tax_type": "Reverse Charge Domestic",
+  "description": "Achats domestiques avec autoliquidation de la TVA par le preneur (cocontractant, grille 87). La TVA 6% alimente simultanément les grilles 56 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "56",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_reverse_charge_domestic_06_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_purchase_reverse_charge_domestic_00_investment",
+  "title": "TVA 0% — Achats biens d'investissement en autoliquidation domestique",
+  "direction": "Purchase",
+  "rate": 0.0,
+  "tax_type": "Reverse Charge Domestic",
+  "description": "Achats domestiques avec autoliquidation de la TVA par le preneur (cocontractant, grille 87). La TVA 0% alimente simultanément les grilles 56 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_purchase_reverse_charge_domestic_00_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_acquisition_12_goods",
+  "title": "TVA 12% — Acquisition intracommunautaire de biens",
+  "direction": "Purchase",
+  "rate": 12.0,
+  "tax_type": "Intra-EU Acquisition",
+  "description": "Acquisition intracommunautaire de biens (grilles 86 + 81) avec auto-liquidation 12% en grilles 55 et 59.",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "55",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_acquisition_12_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_acquisition_06_goods",
+  "title": "TVA 6% — Acquisition intracommunautaire de biens",
+  "direction": "Purchase",
+  "rate": 6.0,
+  "tax_type": "Intra-EU Acquisition",
+  "description": "Acquisition intracommunautaire de biens (grilles 86 + 81) avec auto-liquidation 6% en grilles 55 et 59.",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "55",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_acquisition_06_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_acquisition_00_goods",
+  "title": "TVA 0% — Acquisition intracommunautaire de biens",
+  "direction": "Purchase",
+  "rate": 0.0,
+  "tax_type": "Intra-EU Acquisition",
+  "description": "Acquisition intracommunautaire de biens (grilles 86 + 81) avec auto-liquidation 0% en grilles 55 et 59.",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_acquisition_00_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_acquisition_21_misc",
+  "title": "TVA 21% — Acquisition intracommunautaire (autres)",
+  "direction": "Purchase",
+  "rate": 21.0,
+  "tax_type": "Intra-EU Acquisition",
+  "description": "Acquisition intracommunautaire de biens passant par la grille 82 ; auto-liquidation 21% en grilles 55 et 59.",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "55",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_acquisition_21_misc"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_services_12",
+  "title": "TVA 12% — Services intracommunautaires reçus",
+  "direction": "Purchase",
+  "rate": 12.0,
+  "tax_type": "Reverse Charge EU",
+  "description": "Services intracommunautaires reçus B2B (grilles 88 + 82) avec auto-liquidation 12% en grilles 55 et 59.",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "88",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "55",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "88",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_services_12"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_acquisition_12_misc",
+  "title": "TVA 12% — Acquisition intracommunautaire (autres)",
+  "direction": "Purchase",
+  "rate": 12.0,
+  "tax_type": "Intra-EU Acquisition",
+  "description": "Acquisition intracommunautaire de biens passant par la grille 82 ; auto-liquidation 12% en grilles 55 et 59.",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "55",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_acquisition_12_misc"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_services_06",
+  "title": "TVA 6% — Services intracommunautaires reçus",
+  "direction": "Purchase",
+  "rate": 6.0,
+  "tax_type": "Reverse Charge EU",
+  "description": "Services intracommunautaires reçus B2B (grilles 88 + 82) avec auto-liquidation 6% en grilles 55 et 59.",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "88",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "55",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "88",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_services_06"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_acquisition_06_misc",
+  "title": "TVA 6% — Acquisition intracommunautaire (autres)",
+  "direction": "Purchase",
+  "rate": 6.0,
+  "tax_type": "Intra-EU Acquisition",
+  "description": "Acquisition intracommunautaire de biens passant par la grille 82 ; auto-liquidation 6% en grilles 55 et 59.",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "55",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_acquisition_06_misc"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_services_00",
+  "title": "TVA 0% — Services intracommunautaires reçus",
+  "direction": "Purchase",
+  "rate": 0.0,
+  "tax_type": "Reverse Charge EU",
+  "description": "Services intracommunautaires reçus B2B (grilles 88 + 82) avec auto-liquidation 0% en grilles 55 et 59.",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "88",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "88",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_services_00"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_acquisition_21_investment",
+  "title": "TVA 21% — Acquisition intracommunautaire de biens d'investissement",
+  "direction": "Purchase",
+  "rate": 21.0,
+  "tax_type": "Intra-EU Acquisition",
+  "description": "Acquisition intracommunautaire de biens d'investissement (grilles 86 + 83) avec auto-liquidation 21%.",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "55",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_acquisition_21_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_acquisition_00_misc",
+  "title": "TVA 0% — Acquisition intracommunautaire (autres)",
+  "direction": "Purchase",
+  "rate": 0.0,
+  "tax_type": "Intra-EU Acquisition",
+  "description": "Acquisition intracommunautaire de biens passant par la grille 82 ; auto-liquidation 0% en grilles 55 et 59.",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_acquisition_00_misc"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_acquisition_12_investment",
+  "title": "TVA 12% — Acquisition intracommunautaire de biens d'investissement",
+  "direction": "Purchase",
+  "rate": 12.0,
+  "tax_type": "Intra-EU Acquisition",
+  "description": "Acquisition intracommunautaire de biens d'investissement (grilles 86 + 83) avec auto-liquidation 12%.",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "55",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_acquisition_12_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_acquisition_06_investment",
+  "title": "TVA 6% — Acquisition intracommunautaire de biens d'investissement",
+  "direction": "Purchase",
+  "rate": 6.0,
+  "tax_type": "Intra-EU Acquisition",
+  "description": "Acquisition intracommunautaire de biens d'investissement (grilles 86 + 83) avec auto-liquidation 6%.",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "55",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_acquisition_06_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_intra_eu_acquisition_00_investment",
+  "title": "TVA 0% — Acquisition intracommunautaire de biens d'investissement",
+  "direction": "Purchase",
+  "rate": 0.0,
+  "tax_type": "Intra-EU Acquisition",
+  "description": "Acquisition intracommunautaire de biens d'investissement (grilles 86 + 83) avec auto-liquidation 0%.",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "86",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "84",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_intra_eu_acquisition_00_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_import_reverse_charge_21_goods",
+  "title": "TVA 21% — Importation hors UE biens en autoliquidation",
+  "direction": "Purchase",
+  "rate": 21.0,
+  "tax_type": "Import",
+  "description": "Importation depuis pays tiers avec report de perception (grille 87) ; auto-liquidation 21% en grille 57 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "57",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_import_reverse_charge_21_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_import_reverse_charge_12_goods",
+  "title": "TVA 12% — Importation hors UE biens en autoliquidation",
+  "direction": "Purchase",
+  "rate": 12.0,
+  "tax_type": "Import",
+  "description": "Importation depuis pays tiers avec report de perception (grille 87) ; auto-liquidation 12% en grille 57 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "57",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_import_reverse_charge_12_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_import_reverse_charge_06_goods",
+  "title": "TVA 6% — Importation hors UE biens en autoliquidation",
+  "direction": "Purchase",
+  "rate": 6.0,
+  "tax_type": "Import",
+  "description": "Importation depuis pays tiers avec report de perception (grille 87) ; auto-liquidation 6% en grille 57 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "57",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_import_reverse_charge_06_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_import_reverse_charge_00_goods",
+  "title": "TVA 0% — Importation hors UE biens en autoliquidation",
+  "direction": "Purchase",
+  "rate": 0.0,
+  "tax_type": "Import",
+  "description": "Importation depuis pays tiers avec report de perception (grille 87) ; auto-liquidation 0% en grille 57 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "81",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_import_reverse_charge_00_goods"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_import_reverse_charge_21_services",
+  "title": "TVA 21% — Importation hors UE services en autoliquidation",
+  "direction": "Purchase",
+  "rate": 21.0,
+  "tax_type": "Import",
+  "description": "Importation depuis pays tiers avec report de perception (grille 87) ; auto-liquidation 21% en grille 57 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "57",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_import_reverse_charge_21_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_import_reverse_charge_12_services",
+  "title": "TVA 12% — Importation hors UE services en autoliquidation",
+  "direction": "Purchase",
+  "rate": 12.0,
+  "tax_type": "Import",
+  "description": "Importation depuis pays tiers avec report de perception (grille 87) ; auto-liquidation 12% en grille 57 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "57",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_import_reverse_charge_12_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_import_reverse_charge_06_services",
+  "title": "TVA 6% — Importation hors UE services en autoliquidation",
+  "direction": "Purchase",
+  "rate": 6.0,
+  "tax_type": "Import",
+  "description": "Importation depuis pays tiers avec report de perception (grille 87) ; auto-liquidation 6% en grille 57 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "57",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_import_reverse_charge_06_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_import_reverse_charge_00_services",
+  "title": "TVA 0% — Importation hors UE services en autoliquidation",
+  "direction": "Purchase",
+  "rate": 0.0,
+  "tax_type": "Import",
+  "description": "Importation depuis pays tiers avec report de perception (grille 87) ; auto-liquidation 0% en grille 57 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "82",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_import_reverse_charge_00_services"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_import_reverse_charge_21_investment",
+  "title": "TVA 21% — Importation hors UE biens d'investissement en autoliquidation",
+  "direction": "Purchase",
+  "rate": 21.0,
+  "tax_type": "Import",
+  "description": "Importation depuis pays tiers avec report de perception (grille 87) ; auto-liquidation 21% en grille 57 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "57",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_import_reverse_charge_21_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_import_reverse_charge_12_investment",
+  "title": "TVA 12% — Importation hors UE biens d'investissement en autoliquidation",
+  "direction": "Purchase",
+  "rate": 12.0,
+  "tax_type": "Import",
+  "description": "Importation depuis pays tiers avec report de perception (grille 87) ; auto-liquidation 12% en grille 57 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "57",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_import_reverse_charge_12_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_import_reverse_charge_06_investment",
+  "title": "TVA 6% — Importation hors UE biens d'investissement en autoliquidation",
+  "direction": "Purchase",
+  "rate": 6.0,
+  "tax_type": "Import",
+  "description": "Importation depuis pays tiers avec report de perception (grille 87) ; auto-liquidation 6% en grille 57 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "59",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "57",
+    "amount_type": "Tax",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   },
+   {
+    "grid": "62",
+    "amount_type": "Tax",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_import_reverse_charge_06_investment"
+ },
+ {
+  "doctype": "Belgian VAT Tax Definition",
+  "code": "be_vat_import_reverse_charge_00_investment",
+  "title": "TVA 0% — Importation hors UE biens d'investissement en autoliquidation",
+  "direction": "Purchase",
+  "rate": 0.0,
+  "tax_type": "Import",
+  "description": "Importation depuis pays tiers avec report de perception (grille 87) ; auto-liquidation 0% en grille 57 (due) et 59 (déductible).",
+  "grid_tags": [
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Invoice",
+    "sign": 1
+   },
+   {
+    "grid": "83",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "87",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": -1
+   },
+   {
+    "grid": "85",
+    "amount_type": "Base",
+    "document_type": "Refund",
+    "sign": 1
+   }
+  ],
+  "name": "be_vat_import_reverse_charge_00_investment"
+ }
+]
