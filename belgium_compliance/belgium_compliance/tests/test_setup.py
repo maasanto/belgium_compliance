@@ -20,25 +20,48 @@ from belgium_compliance.belgium_compliance.tests.utils import (
 from belgium_compliance.setup import materialise_for_company
 
 
+def _reset_tax_template_state(company: str) -> None:
+	"""Drop any Belgian VAT Tax Template Links + their associated templates
+	for the given company. Used when a test class needs to start from zero."""
+	for link_name in frappe.get_all(
+		"Belgian VAT Tax Template Link",
+		filters={"company": company},
+		pluck="name",
+	):
+		frappe.delete_doc(
+			"Belgian VAT Tax Template Link",
+			link_name,
+			force=True,
+			delete_permanently=True,
+		)
+	for doctype in (
+		"Sales Taxes and Charges Template",
+		"Purchase Taxes and Charges Template",
+		"Item Tax Template",
+	):
+		for name in frappe.get_all(
+			doctype,
+			filters={"company": company, "title": ("like", "BE %")},
+			pluck="name",
+		):
+			frappe.delete_doc(doctype, name, force=True, delete_permanently=True)
+
+
 class TestMaterialise(FrappeTestCase):
 	@classmethod
 	def setUpClass(cls):
 		super().setUpClass()
 		ensure_vat_settings()
+		# Other test classes (e.g. TestGetTaxDefinitionForTemplate) run before
+		# this one alphabetically and leave behind Tax Template Links — those
+		# would make every Tax Definition look "already materialised", so the
+		# dry-run/live tests would return created=0. Reset to a clean slate.
+		_reset_tax_template_state(TEST_COMPANY)
 
 	def test_dry_run_creates_nothing(self):
 		# Capture template counts before/after the dry run.
 		before_sales = frappe.db.count("Sales Taxes and Charges Template", {"company": TEST_COMPANY})
 		before_purchase = frappe.db.count("Purchase Taxes and Charges Template", {"company": TEST_COMPANY})
-
-		# Debug: confirm fixtures are visible from this test's transaction context.
-		bvtd_count = frappe.db.count("Belgian VAT Tax Definition")
-		bvtd_names = frappe.get_all("Belgian VAT Tax Definition", pluck="name")
-		print(
-			f"DEBUG materialise: count={bvtd_count}, get_all len={len(bvtd_names)}, "
-			f"sample={bvtd_names[:3]}, user={frappe.session.user}",
-			flush=True,
-		)
 
 		result = materialise_for_company(TEST_COMPANY, dry_run=1)
 
