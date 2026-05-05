@@ -1,0 +1,546 @@
+{
+ "actions": [],
+ "allow_import": 0,
+ "allow_rename": 0,
+ "autoname": "Prompt",
+ "creation": "2026-04-30 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "is_submittable": 1,
+ "track_changes": 1,
+ "field_order": [
+  "section_period",
+  "company",
+  "period_type",
+  "column_break_period",
+  "period_year",
+  "period_month_or_quarter",
+  "section_dates",
+  "start_date",
+  "end_date",
+  "section_status",
+  "status",
+  "column_break_status",
+  "amending_declaration",
+  "intervat_reference",
+  "section_cadre_2",
+  "g_00",
+  "g_01",
+  "g_02",
+  "g_03",
+  "column_break_cadre_2_a",
+  "g_44",
+  "g_45",
+  "g_46l",
+  "g_46t",
+  "column_break_cadre_2_b",
+  "g_47",
+  "g_48",
+  "g_49",
+  "section_cadre_3",
+  "g_81",
+  "g_82",
+  "g_83",
+  "column_break_cadre_3_a",
+  "g_84",
+  "g_85",
+  "column_break_cadre_3_b",
+  "g_86",
+  "g_87",
+  "g_88",
+  "section_cadre_4",
+  "g_54",
+  "g_55",
+  "g_56",
+  "column_break_cadre_4",
+  "g_57",
+  "g_61",
+  "g_63",
+  "section_cadre_5",
+  "g_59",
+  "column_break_cadre_5",
+  "g_62",
+  "g_64",
+  "section_cadre_6",
+  "g_71",
+  "column_break_cadre_6",
+  "g_72",
+  "section_audit",
+  "computed_lines",
+  "section_adjustments",
+  "adjustments",
+  "section_filing",
+  "generated_xml",
+  "column_break_filing",
+  "closing_entry",
+  "payment_entry"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_period",
+   "fieldtype": "Section Break",
+   "label": "Period"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "period_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Period Type",
+   "options": "Monthly\nQuarterly",
+   "reqd": 1,
+   "default": "Quarterly"
+  },
+  {
+   "fieldname": "column_break_period",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "period_year",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Year",
+   "reqd": 1
+  },
+  {
+   "fieldname": "period_month_or_quarter",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Month or Quarter",
+   "reqd": 1,
+   "description": "1-12 for monthly declarations, 1-4 for quarterly."
+  },
+  {
+   "fieldname": "section_dates",
+   "fieldtype": "Section Break",
+   "label": "Computed period"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_status",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Draft\nReady\nFiled\nPaid",
+   "default": "Draft"
+  },
+  {
+   "fieldname": "column_break_status",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "amending_declaration",
+   "fieldtype": "Link",
+   "label": "Amends Declaration",
+   "options": "Belgian VAT Declaration",
+   "description": "Set when this declaration is a rectification of a previously filed one."
+  },
+  {
+   "fieldname": "intervat_reference",
+   "fieldtype": "Data",
+   "label": "INTERVAT Reference",
+   "description": "Reference number returned by the SPF Finances INTERVAT portal after successful submission."
+  },
+  {
+   "fieldname": "section_cadre_2",
+   "fieldtype": "Section Break",
+   "label": "Cadre II — Opérations à la sortie"
+  },
+  {
+   "fieldname": "g_00",
+   "fieldtype": "Currency",
+   "label": "00 — Régime particulier",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_01",
+   "fieldtype": "Currency",
+   "label": "01 — Opérations à 6%",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_02",
+   "fieldtype": "Currency",
+   "label": "02 — Opérations à 12%",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_03",
+   "fieldtype": "Currency",
+   "label": "03 — Opérations à 21%",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "column_break_cadre_2_a",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "g_44",
+   "fieldtype": "Currency",
+   "label": "44 — Services intra-UE",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_45",
+   "fieldtype": "Currency",
+   "label": "45 — Cocontractant",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_46l",
+   "fieldtype": "Currency",
+   "label": "46L — Livraisons intra-UE",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_46t",
+   "fieldtype": "Currency",
+   "label": "46T — Triangulaires",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "column_break_cadre_2_b",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "g_47",
+   "fieldtype": "Currency",
+   "label": "47 — Autres exemptées",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_48",
+   "fieldtype": "Currency",
+   "label": "48 — Notes de crédit (44, 46)",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_49",
+   "fieldtype": "Currency",
+   "label": "49 — Notes de crédit (autres cadre II)",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "section_cadre_3",
+   "fieldtype": "Section Break",
+   "label": "Cadre III — Opérations à l'entrée"
+  },
+  {
+   "fieldname": "g_81",
+   "fieldtype": "Currency",
+   "label": "81 — Matières/marchandises",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_82",
+   "fieldtype": "Currency",
+   "label": "82 — Services et biens divers",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_83",
+   "fieldtype": "Currency",
+   "label": "83 — Biens d'investissement",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "column_break_cadre_3_a",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "g_84",
+   "fieldtype": "Currency",
+   "label": "84 — Notes de crédit (86, 88)",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_85",
+   "fieldtype": "Currency",
+   "label": "85 — Notes de crédit (autres cadre III)",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "column_break_cadre_3_b",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "g_86",
+   "fieldtype": "Currency",
+   "label": "86 — Acquisitions intra-UE",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_87",
+   "fieldtype": "Currency",
+   "label": "87 — Autoliquidation domestique",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_88",
+   "fieldtype": "Currency",
+   "label": "88 — Services intra-UE reçus",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "section_cadre_4",
+   "fieldtype": "Section Break",
+   "label": "Cadre IV — Taxes dues"
+  },
+  {
+   "fieldname": "g_54",
+   "fieldtype": "Currency",
+   "label": "54 — TVA sur 01, 02, 03",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_55",
+   "fieldtype": "Currency",
+   "label": "55 — TVA sur 86, 88",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_56",
+   "fieldtype": "Currency",
+   "label": "56 — TVA sur 87 (hors imports)",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "column_break_cadre_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "g_57",
+   "fieldtype": "Currency",
+   "label": "57 — TVA sur imports avec report",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_61",
+   "fieldtype": "Currency",
+   "label": "61 — Régularisations en faveur de l'État",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_63",
+   "fieldtype": "Currency",
+   "label": "63 — TVA à reverser",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "section_cadre_5",
+   "fieldtype": "Section Break",
+   "label": "Cadre V — Taxes déductibles"
+  },
+  {
+   "fieldname": "g_59",
+   "fieldtype": "Currency",
+   "label": "59 — TVA déductible",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "column_break_cadre_5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "g_62",
+   "fieldtype": "Currency",
+   "label": "62 — Régularisations en faveur du déclarant",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "g_64",
+   "fieldtype": "Currency",
+   "label": "64 — TVA récupérable",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "section_cadre_6",
+   "fieldtype": "Section Break",
+   "label": "Cadre VI — Soldes"
+  },
+  {
+   "fieldname": "g_71",
+   "fieldtype": "Currency",
+   "label": "71 — Taxe due à l'État",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "column_break_cadre_6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "g_72",
+   "fieldtype": "Currency",
+   "label": "72 — Sommes dues par l'État",
+   "read_only": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "section_audit",
+   "fieldtype": "Section Break",
+   "label": "Computed Lines (audit trail)",
+   "collapsible": 1,
+   "collapsible_depends_on": "1"
+  },
+  {
+   "fieldname": "computed_lines",
+   "fieldtype": "Table",
+   "label": "Computed Lines",
+   "options": "Belgian VAT Declaration Line",
+   "read_only": 1,
+   "description": "One line per (GL Entry × grid contribution). Populated by the Compute action; never edited manually."
+  },
+  {
+   "fieldname": "section_adjustments",
+   "fieldtype": "Section Break",
+   "label": "Manual adjustments"
+  },
+  {
+   "fieldname": "adjustments",
+   "fieldtype": "Table",
+   "label": "Adjustments",
+   "options": "Belgian VAT Declaration Adjustment",
+   "description": "Manual corrections applied on top of computed totals. Each adjustment requires a reason for audit."
+  },
+  {
+   "fieldname": "section_filing",
+   "fieldtype": "Section Break",
+   "label": "Filing"
+  },
+  {
+   "fieldname": "generated_xml",
+   "fieldtype": "Attach",
+   "label": "INTERVAT XML",
+   "read_only": 1,
+   "description": "XML payload conforming to the SPF Finances NewTVA-in_v0_9 schema. Generated when status moves to Ready."
+  },
+  {
+   "fieldname": "column_break_filing",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "closing_entry",
+   "fieldtype": "Link",
+   "label": "Closing Journal Entry",
+   "options": "Journal Entry",
+   "read_only": 1,
+   "description": "Journal Entry that clears the VAT control accounts and posts the net to the VAT payable account. Created on submit."
+  },
+  {
+   "fieldname": "payment_entry",
+   "fieldtype": "Link",
+   "label": "Payment Journal Entry",
+   "options": "Journal Entry",
+   "read_only": 1,
+   "description": "Journal Entry recording the payment to / refund from the SPF Finances. Created when status moves to Paid."
+  }
+ ],
+ "links": [],
+ "modified": "2026-04-30 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Belgium Compliance",
+ "name": "Belgian VAT Declaration",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "name"
+}

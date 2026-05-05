@@ -1,0 +1,123 @@
+{
+ "actions": [],
+ "creation": "2026-04-30 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "grid",
+  "amount_type",
+  "tax_definition",
+  "column_break_1",
+  "voucher_type",
+  "voucher_no",
+  "posting_date",
+  "section_break_2",
+  "account",
+  "amount",
+  "sign",
+  "contributing_amount",
+  "section_break_3",
+  "gl_entry"
+ ],
+ "fields": [
+  {
+   "fieldname": "grid",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Grid",
+   "options": "Belgian VAT Grid",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amount_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Amount Type",
+   "options": "Base\nTax",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tax_definition",
+   "fieldtype": "Link",
+   "label": "Tax Definition",
+   "options": "Belgian VAT Tax Definition",
+   "description": "The Belgian VAT Tax Definition that produced this contribution (audit reference)."
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "voucher_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Voucher Type"
+  },
+  {
+   "fieldname": "voucher_no",
+   "fieldtype": "Dynamic Link",
+   "in_list_view": 1,
+   "label": "Voucher No",
+   "options": "voucher_type"
+  },
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date"
+  },
+  {
+   "fieldname": "section_break_2",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "account",
+   "fieldtype": "Link",
+   "label": "Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "options": "Company:company:default_currency"
+  },
+  {
+   "default": "1",
+   "fieldname": "sign",
+   "fieldtype": "Int",
+   "label": "Sign"
+  },
+  {
+   "fieldname": "contributing_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Contribution",
+   "options": "Company:company:default_currency",
+   "read_only": 1,
+   "description": "amount * sign — the actual contribution to the grid total."
+  },
+  {
+   "fieldname": "section_break_3",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "gl_entry",
+   "fieldtype": "Link",
+   "label": "GL Entry",
+   "options": "GL Entry",
+   "description": "Originating GL Entry — drill-down for audit."
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-04-30 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Belgium Compliance",
+ "name": "Belgian VAT Declaration Line",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
