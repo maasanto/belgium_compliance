@@ -139,6 +139,11 @@ class BelgianVATDeclaration(Document):
 		self._apply_adjustments()
 		self._apply_total_formulas()
 		self.status = "Ready"
+		# Persist the freshly-computed grids so that downstream consumers
+		# (XML generation, reports) see them after a doc reload. Skip when
+		# the doc is already submitted/cancelled — saving would error.
+		if self.docstatus == 0 and not self.is_new():
+			self.save(ignore_permissions=True)
 
 	# ------------------------------------------------------------------
 	# Compute — internals
