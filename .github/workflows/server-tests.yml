@@ -124,6 +124,11 @@ jobs:
           bench --site test_site set-config developer_mode 1
           bench --site test_site set-config allow_tests 1
 
+      - name: Install coverage in bench env
+        working-directory: frappe-bench
+        run: |
+          ./env/bin/pip install coverage
+
       - name: Run tests
         working-directory: frappe-bench
         run: |
