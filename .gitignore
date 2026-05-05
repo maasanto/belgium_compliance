@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.eggs/
+*.egg-info/
+*.egg
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+
+# Build artifacts
+build/
+dist/
+node_modules/
+*.tsbuildinfo
+
+# Frappe-specific local junk
+sites/
+logs/
+.bench/
+
+# Venv
+.venv/
+venv/
+env/
