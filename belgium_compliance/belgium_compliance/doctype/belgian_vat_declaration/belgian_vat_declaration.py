@@ -49,6 +49,20 @@ GRID_CODES = [
 # direct extraction; their value is derived in _apply_total_formulas.
 TOTAL_GRID_CODES = {"71", "72"}
 
+# Tax boxes sourced from the *booked* VAT read straight off the ledger
+# (GL Entries on the accounts configured in Belgian VAT Settings), routed by
+# account + debit/credit sign — never recomputed as base × rate. This is the
+# fix for the per-line rounding drift and makes JE-booked VAT visible.
+#
+# Only boxes whose account→box mapping is genuinely 1:1 belong here: every
+# rate and sub-regime that lands in 54/64 posts to the single output VAT
+# account, and everything deductible lands in 59/63 via the input/reverse-
+# charge deductible accounts. The reverse-charge *due* boxes (55/56/57) are
+# deliberately excluded — the intra-EU due account also carries import VAT
+# (box 57), so account routing can't separate them; those stay definition-
+# driven off the invoice lines until per-box accounts exist.
+GL_TAX_GRIDS = frozenset({"54", "59", "63", "64"})
+
 
 def grid_to_fieldname(code: str) -> str:
 	"""Map an INTERVAT grid code (e.g. '46L') to its declaration fieldname (g_46l)."""
@@ -116,26 +130,35 @@ class BelgianVATDeclaration(Document):
 
 	@frappe.whitelist()
 	def compute(self):
-		"""Recompute the 31 grid totals from GL Entries posted in the period.
+		"""Recompute the grid totals as a faithful read of the ledger.
 
-		Strategy (Phase 2 skeleton):
+		Each box family is filled from the source that carries the truth:
+
 		  1. Reset grid fields and computed_lines.
-		  2. Pull GL Entries for the company/period bound to taxes that the
-		     materialised Sales/Purchase Taxes and Charges Templates produced
-		     from a Belgian VAT Tax Definition.
-		  3. For each entry, fan out into N grid contributions according to
-		     the Tax Definition's grid_tags (matched on amount_type ×
-		     document_type).
-		  4. Apply manual adjustments.
-		  5. Apply total formulas (g_71, g_72).
+		  2. Base boxes (00-03/44-49/81-88) and the reverse-charge *due* boxes
+		     come from the Sales/Purchase Invoice lines, routed through the
+		     Belgian VAT Tax Definition grid tags (they carry the goods /
+		     services / investment classification that the GL can't).
+		  3. Tax boxes 54/59/63/64 come from the *booked* VAT on the ledger —
+		     GL Entries on the accounts configured in Belgian VAT Settings,
+		     routed by account + debit/credit sign. No base × rate rounding,
+		     and JE-booked VAT is included for free.
+		  4. Journal-Entry bases flow in through the account→grid mapping on
+		     Belgian VAT Settings.
+		  5. Apply manual adjustments, then the total formulas (g_71, g_72).
 
-		For now steps 2-3 are stubbed: we leave the grid fields at zero unless
-		manual adjustments are present. The materialisation hook that links a
-		template to a Tax Definition is Phase 1 follow-up (after the Odoo
-		bulk port lands).
+		A cent-level cross-check between the recomputed base × rate and the
+		booked VAT is surfaced as a warning so a mis-booked VAT account
+		doesn't pass silently.
 		"""
 		self._reset_grids()
-		self._extract_from_gl_entries()
+		self._extract_from_invoices()
+		self._extract_tax_from_gl()
+		self._extract_bases_from_journal_entries()
+		# Cross-check the booked VAT against base × rate before manual
+		# adjustments fold in — otherwise an adjustment on 54/59/63/64 would
+		# masquerade as a booking discrepancy.
+		self._warn_on_booked_vat_mismatch()
 		self._apply_adjustments()
 		self._apply_total_formulas()
 		self.status = "Ready"
@@ -153,8 +176,11 @@ class BelgianVATDeclaration(Document):
 		for code in GRID_CODES:
 			self.set(grid_to_fieldname(code), 0)
 		self.computed_lines = []
+		# base × rate recomputed per line, kept only to cross-check the booked
+		# VAT read from the GL (see _warn_on_booked_vat_mismatch).
+		self._recomputed_tax = {code: 0.0 for code in GL_TAX_GRIDS}
 
-	def _extract_from_gl_entries(self):
+	def _extract_from_invoices(self):
 		"""Walk Sales/Purchase Invoice item lines posted in the period.
 
 		Each item resolves to a Belgian VAT Tax Definition, in priority order:
@@ -166,6 +192,10 @@ class BelgianVATDeclaration(Document):
 		Items that resolve to no definition are skipped silently — they
 		belong to non-Belgian-VAT flows (e.g. another country's templates
 		on a multi-company site).
+
+		Only the base boxes and the reverse-charge *due* boxes are filled from
+		here; the booked-VAT boxes (GL_TAX_GRIDS) are read from the ledger in
+		_extract_tax_from_gl instead.
 		"""
 		for invoice_doctype, item_doctype, parent_template_doctype in (
 			("Sales Invoice", "Sales Invoice Item", "Sales Taxes and Charges Template"),
@@ -215,16 +245,21 @@ class BelgianVATDeclaration(Document):
 		if not invoices:
 			return
 
+		# Fetch every item line for the period in one query, then group by
+		# invoice — avoids a per-invoice round-trip over a full quarter.
+		items_by_invoice: dict[str, list] = {}
+		for item in frappe.get_all(
+			item_doctype,
+			filters={"parent": ["in", [inv.name for inv in invoices]]},
+			fields=["parent", "name", "item_tax_template", "base_net_amount"],
+		):
+			items_by_invoice.setdefault(item.parent, []).append(item)
+
 		for inv in invoices:
 			parent_definition = parent_template_map.get(inv.taxes_and_charges)
 			document_type = "Refund" if inv.is_return else "Invoice"
 
-			items = frappe.get_all(
-				item_doctype,
-				filters={"parent": inv.name},
-				fields=["name", "item_tax_template", "base_net_amount"],
-			)
-			for item in items:
+			for item in items_by_invoice.get(inv.name, []):
 				definition_name = (
 					item_template_map.get(item.item_tax_template)
 					if item.item_tax_template
@@ -242,6 +277,16 @@ class BelgianVATDeclaration(Document):
 						continue
 					raw = base if tag.amount_type == "Base" else tax
 					contribution = raw * flt(tag.sign)
+
+					# Booked-VAT boxes are read from the ledger, never from the
+					# invoice line — guard on the grid so a stray Base tag on a
+					# tax box can't double-count on top of the GL read. Keep the
+					# recomputed tax only to cross-check that GL read.
+					if tag.grid in GL_TAX_GRIDS:
+						if tag.amount_type == "Tax":
+							self._recomputed_tax[tag.grid] += contribution
+						continue
+
 					if not contribution:
 						continue
 
@@ -261,6 +306,136 @@ class BelgianVATDeclaration(Document):
 					)
 					field = grid_to_fieldname(tag.grid)
 					self.set(field, flt(self.get(field)) + contribution)
+
+	# ------------------------------------------------------------------
+	# Booked VAT — read straight off the ledger
+	# ------------------------------------------------------------------
+
+	def _extract_tax_from_gl(self):
+		"""Fill the booked-VAT boxes (GL_TAX_GRIDS) from GL Entries.
+
+		Reads every non-cancelled GL Entry in the period on the VAT accounts
+		configured in Belgian VAT Settings and routes it by account +
+		debit/credit sign. This captures invoice- and JE-booked VAT alike and
+		reflects the exact amount posted, so multi-rate invoices come out with
+		no per-line rounding drift.
+		"""
+		settings = _get_vat_settings(self.company)
+		if not settings:
+			return
+
+		routing = _gl_tax_account_routing(settings)
+		if not routing:
+			return
+
+		for entry in self._fetch_gl_entries(list(routing)):
+			credit_grid, debit_grid = routing[entry.account]
+			for amount, grid in ((flt(entry.credit), credit_grid), (flt(entry.debit), debit_grid)):
+				if not amount or not grid:
+					continue
+				self._add_ledger_line(grid, "Tax", entry, amount)
+
+	def _extract_bases_from_journal_entries(self):
+		"""Include VAT-relevant Journal Entry bases via the account→grid map.
+
+		Belgian VAT Settings can map a P&L / base account to a base grid so
+		that bases booked directly through a Journal Entry — periodic takings,
+		corrections, accrued reverse-charge bases — reach the declaration
+		without being restructured into invoices.
+
+		Only Journal-Entry postings are read here: invoice-sourced postings on
+		the same account already flow through the invoice lines, and the VAT
+		itself already flows through _extract_tax_from_gl, so nothing is
+		double-counted.
+		"""
+		settings = _get_vat_settings(self.company)
+		if not settings:
+			return
+
+		mappings = {m.account: m for m in (settings.get("journal_mappings") or []) if m.account and m.grid}
+		if not mappings:
+			return
+
+		for entry in self._fetch_gl_entries(list(mappings), {"voucher_type": "Journal Entry"}):
+			mapping = mappings[entry.account]
+			# Bases live on the natural balance of the account (credit for
+			# income, debit for expense). The mapping's sign lets the user
+			# pick which side is positive; default +1 suits income accounts.
+			# Reversals net through the debit/credit sign — there is no separate
+			# Invoice/Refund grid routing here (unlike the invoice line path).
+			amount = (flt(entry.credit) - flt(entry.debit)) * (mapping.sign or 1)
+			if not amount:
+				continue
+			self._add_ledger_line(mapping.grid, "Base", entry, amount)
+
+	def _fetch_gl_entries(self, accounts: list[str], extra_filters: dict | None = None) -> list:
+		"""Non-cancelled GL Entries for this period on the given accounts.
+		Shared by the booked-VAT and JE-base readers so the field list and
+		period/cancellation filters live in one place."""
+		filters = {
+			"company": self.company,
+			"account": ["in", accounts],
+			"posting_date": ["between", [self.start_date, self.end_date]],
+			"is_cancelled": 0,
+		}
+		if extra_filters:
+			filters.update(extra_filters)
+		return frappe.get_all(
+			"GL Entry",
+			filters=filters,
+			fields=["name", "account", "debit", "credit", "voucher_type", "voucher_no", "posting_date"],
+		)
+
+	def _add_ledger_line(self, grid: str, amount_type: str, entry, contribution: float):
+		"""Append an audit line for a ledger-sourced contribution and fold it
+		into the grid total. Used by both the booked-VAT and JE-base readers."""
+		self.append(
+			"computed_lines",
+			{
+				"grid": grid,
+				"amount_type": amount_type,
+				"voucher_type": entry.voucher_type,
+				"voucher_no": entry.voucher_no,
+				"posting_date": entry.posting_date,
+				"account": entry.account,
+				"amount": contribution,
+				"sign": 1,
+				"contributing_amount": contribution,
+				"gl_entry": entry.name,
+			},
+		)
+		field = grid_to_fieldname(grid)
+		self.set(field, flt(self.get(field)) + contribution)
+
+	def _warn_on_booked_vat_mismatch(self):
+		"""Cross-check the booked VAT read from the GL against the base × rate
+		recomputation. A gap beyond a cent per box usually means VAT was
+		posted to an account outside Belgian VAT Settings (or to the wrong
+		one) — surface it rather than let the declaration drift silently."""
+		diffs = []
+		for grid in sorted(GL_TAX_GRIDS):
+			booked = flt(self.get(grid_to_fieldname(grid)))
+			recomputed = flt(self._recomputed_tax.get(grid, 0.0))
+			if abs(booked - recomputed) > 0.01:
+				diffs.append((grid, booked, recomputed))
+		if not diffs:
+			return
+
+		rows = "<br>".join(
+			_("Box {0}: booked {1:.2f} vs base × rate {2:.2f} (Δ {3:.2f})").format(
+				grid, booked, recomputed, booked - recomputed
+			)
+			for grid, booked, recomputed in diffs
+		)
+		frappe.msgprint(
+			_("Booked VAT differs from the base × rate recomputation:")
+			+ "<br>"
+			+ rows
+			+ "<br>"
+			+ _("Check that all VAT is posted to the accounts in Belgian VAT Settings."),
+			title=_("VAT consistency check"),
+			indicator="orange",
+		)
 
 	def _apply_adjustments(self):
 		for adj in self.adjustments or []:
@@ -344,6 +519,44 @@ class BelgianVATDeclaration(Document):
 
 	def get_grid_value(self, grid_code: str) -> float:
 		return flt(self.get(grid_to_fieldname(grid_code)))
+
+
+def _get_vat_settings(company: str):
+	"""Return the company's Belgian VAT Settings, or None when the company has
+	no Belgian VAT set-up (compute then simply skips the ledger readers)."""
+	if not frappe.db.exists("Belgian VAT Settings", company):
+		return None
+	return frappe.get_cached_doc("Belgian VAT Settings", company)
+
+
+def _gl_tax_account_routing(settings) -> dict[str, tuple[str, str]]:
+	"""Map each configured VAT account to the (credit_grid, debit_grid) pair
+	its booked movements land in.
+
+	Output VAT: collected on a sale credits 54; reversed on a sales credit
+	note it debits, landing in the regularisation box 64. Deductible VAT
+	(regular input, investment and the reverse-charge deductible leg) is
+	debited on a purchase into 59; reversed on a purchase credit note it
+	credits, landing in the regularisation box 63.
+
+	Accounts left empty in the settings are skipped. When two roles share an
+	account they route to the same boxes, so collapsing them is harmless.
+	"""
+	routing: dict[str, tuple[str, str]] = {}
+
+	def route(account, credit_grid, debit_grid):
+		if account:
+			routing.setdefault(account, (credit_grid, debit_grid))
+
+	route(settings.output_vat_account, "54", "64")  # credit→54 due, debit→64 recover
+	for deductible_account in (
+		settings.input_vat_deductible_account,
+		settings.input_vat_investment_account,
+		settings.reverse_charge_vat_deductible_account,
+	):
+		route(deductible_account, "63", "59")  # credit→63 reversal, debit→59 normal
+
+	return routing
 
 
 def _replace_attached_xml(declaration, filename: str, content: bytes) -> None:
