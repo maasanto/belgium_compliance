@@ -13,11 +13,13 @@ except ImportError:
 	from frappe.tests.utils import FrappeTestCase
 
 from belgium_compliance.belgium_compliance.tests.utils import (
+	DOMESTIC_RC_DUE_ACCOUNT_NAME,
+	RC_DUE_ACCOUNT_NAME,
 	TEST_COMPANY,
 	ensure_belgian_company,
 	ensure_vat_settings,
 )
-from belgium_compliance.setup import materialise_for_company
+from belgium_compliance.setup import _accounts_for, materialise_for_company
 
 
 def _reset_tax_template_state(company: str) -> None:
@@ -113,6 +115,96 @@ class TestMaterialise(FrappeTestCase):
 
 		with self.assertRaises(frappe.ValidationError):
 			materialise_for_company(other)
+
+
+class TestAccountsForRouting(FrappeTestCase):
+	"""Unit coverage of _accounts_for — pure routing, no DB records needed."""
+
+	def _settings(self, **overrides):
+		settings = frappe._dict(
+			output_vat_account="Output VAT",
+			input_vat_deductible_account="Input VAT",
+			reverse_charge_vat_due_account="RC VAT Due",
+			domestic_reverse_charge_vat_due_account="Domestic RC VAT Due",
+			reverse_charge_vat_deductible_account="RC VAT Deductible",
+		)
+		settings.update(overrides)
+		return settings
+
+	def _rc_due_account(self, tax_type, settings):
+		definition = frappe._dict(direction="Purchase", tax_type=tax_type, code="test")
+		accounts = dict(_accounts_for(definition, settings))
+		return accounts["rc_due"]
+
+	def test_domestic_reverse_charge_uses_dedicated_account(self):
+		self.assertEqual(
+			self._rc_due_account("Reverse Charge Domestic", self._settings()),
+			"Domestic RC VAT Due",
+		)
+
+	def test_domestic_reverse_charge_falls_back_to_shared_account(self):
+		settings = self._settings(domestic_reverse_charge_vat_due_account=None)
+		self.assertEqual(self._rc_due_account("Reverse Charge Domestic", settings), "RC VAT Due")
+
+	def test_other_reverse_charge_types_keep_shared_account(self):
+		for tax_type in ("Intra-EU Acquisition", "Reverse Charge EU", "Import"):
+			self.assertEqual(
+				self._rc_due_account(tax_type, self._settings()),
+				"RC VAT Due",
+				f"{tax_type} must not use the domestic cocontractant account",
+			)
+
+	def test_sales_direction_unaffected(self):
+		definition = frappe._dict(direction="Sales", tax_type="Reverse Charge Domestic", code="test")
+		self.assertEqual(_accounts_for(definition, self._settings()), [("output", "Output VAT")])
+
+
+class TestReverseChargeDueAccountMaterialisation(FrappeTestCase):
+	"""End-to-end check that materialised Purchase templates carry the right
+	VAT-due account per reverse-charge regime."""
+
+	@classmethod
+	def setUpClass(cls):
+		super().setUpClass()
+		ensure_vat_settings()
+		materialise_for_company(TEST_COMPANY)
+		cls.abbr = frappe.db.get_value("Company", TEST_COMPANY, "abbr")
+
+	def _materialised_due_account(self, tax_type: str) -> str:
+		definition = frappe.db.get_value(
+			"Belgian VAT Tax Definition",
+			{"tax_type": tax_type, "direction": "Purchase", "rate": (">", 0)},
+			"name",
+		)
+		self.assertIsNotNone(definition, f"no Purchase definition with tax_type {tax_type}")
+
+		template_name = frappe.db.get_value(
+			"Belgian VAT Tax Template Link",
+			{
+				"company": TEST_COMPANY,
+				"tax_definition": definition,
+				"tax_template_doctype": "Purchase Taxes and Charges Template",
+			},
+			"tax_template",
+		)
+		self.assertIsNotNone(template_name, f"no materialised template for {definition}")
+
+		template = frappe.get_doc("Purchase Taxes and Charges Template", template_name)
+		due_rows = [row for row in template.taxes if row.add_deduct_tax == "Add"]
+		self.assertEqual(len(due_rows), 1, f"expected one VAT-due row on {template_name}")
+		return due_rows[0].account_head
+
+	def test_domestic_template_posts_to_domestic_account(self):
+		self.assertEqual(
+			self._materialised_due_account("Reverse Charge Domestic"),
+			f"{DOMESTIC_RC_DUE_ACCOUNT_NAME} - {self.abbr}",
+		)
+
+	def test_intra_eu_template_posts_to_shared_account(self):
+		self.assertEqual(
+			self._materialised_due_account("Intra-EU Acquisition"),
+			f"{RC_DUE_ACCOUNT_NAME} - {self.abbr}",
+		)
 
 
 class TestGetTaxDefinitionForTemplate(FrappeTestCase):
