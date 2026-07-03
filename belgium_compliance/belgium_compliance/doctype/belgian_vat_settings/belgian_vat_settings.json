@@ -16,7 +16,9 @@
   "section_reverse_charge",
   "reverse_charge_vat_due_account",
   "domestic_reverse_charge_vat_due_account",
-  "reverse_charge_vat_deductible_account"
+  "reverse_charge_vat_deductible_account",
+  "section_journal_mappings",
+  "journal_mappings"
  ],
  "fields": [
   {
@@ -88,6 +90,18 @@
    "options": "Account",
    "reqd": 1,
    "description": "Account debited for the autoliquidated VAT deductible side (cancels out the due side when fully deductible). Often the same as the regular Input VAT Deductible Account; can be a dedicated 4956 to keep the autoliquidation legs visible."
+  },
+  {
+   "fieldname": "section_journal_mappings",
+   "fieldtype": "Section Break",
+   "label": "Journal Entry Base Mapping"
+  },
+  {
+   "fieldname": "journal_mappings",
+   "fieldtype": "Table",
+   "label": "Journal Entry Base Mapping",
+   "options": "Belgian VAT Journal Mapping",
+   "description": "Route bases booked directly through Journal Entries (periodic takings, corrections, accrued reverse-charge bases) into declaration grids by account. VAT booked on the accounts above is already read from the ledger — map only base / P&L accounts here."
   }
  ],
  "links": [],
