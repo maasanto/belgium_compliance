@@ -74,6 +74,25 @@ Un seul `Belgian VAT Settings` par société (la company sert de clé primaire).
 Les comptes peuvent pointer sur les mêmes ou des comptes distincts selon le
 niveau de détail souhaité dans les balances âgées.
 
+#### Mapping des bases passées en écriture (OD) — optionnel
+
+La table **Journal Entry Base Mapping** route les bases comptabilisées
+directement en `Journal Entry` (recettes journalières, corrections, bases
+d'autoliquidation régularisées) vers une grille de déclaration :
+
+```python
+settings.append("journal_mappings", {
+    "account": "700000 - Ventes de services - MSB",  # compte de produit / charge
+    "grid": "03",                                      # grille de base cible
+    "sign": 1,                                          # +1 pour un compte de produit
+})
+```
+
+Contribution = `(crédit − débit) × sign`. Ne mappez **que des comptes de base**
+(produits / charges) : la TVA comptabilisée sur les comptes ci-dessus est déjà
+lue depuis le grand livre, et seules les écritures de type `Journal Entry` sont
+prises ici (les factures passent par leurs lignes, aucun double comptage).
+
 ### 3.2 Matérialiser les templates de taxes
 
 ```python
@@ -167,17 +186,28 @@ automatiquement.
 
 Bouton **Compute** (ou via API : `doc.compute()`).
 
-L'opération :
+La déclaration est une **lecture fidèle du grand livre** : chaque famille de
+cases vient de la source qui porte la vérité.
+
 1. Reset des 28 champs grilles.
-2. Walk de toutes les `Sales Invoice` et `Purchase Invoice` *submitted* dans
-   la période, dont le template (parent ou Item Tax Template) est lié à une
-   `Belgian VAT Tax Definition`.
-3. Pour chaque ligne d'item : résolution de la Tax Definition, fan-out
-   vers les grilles selon les `grid_tags` matchant `(amount_type × document_type)`,
-   ajout d'une ligne dans `computed_lines` (audit trail).
-4. Application des `adjustments` manuels.
-5. Calcul des totaux 71 / 72 (taxe due / sommes dues par l'État).
-6. Statut → `Ready`.
+2. **Cases de base** (00-03 / 44-49 / 81-88) et cases *TVA due* en
+   autoliquidation (55 / 56 / 57) : walk des `Sales Invoice` et `Purchase
+   Invoice` *submitted* de la période dont le template est lié à une
+   `Belgian VAT Tax Definition`, fan-out vers les grilles selon les `grid_tags`
+   (elles portent la classification biens / services / investissement).
+3. **Cases TVA 54 / 59 / 63 / 64** : lues sur la **TVA réellement comptabilisée**
+   — les `GL Entry` de la période sur les comptes TVA du `Belgian VAT Settings`,
+   routées par compte + sens débit/crédit. Pas de recalcul base × taux, donc
+   pas de dérive d'arrondi ligne par ligne, et la TVA passée en écriture (OD)
+   est prise en compte automatiquement.
+4. **Bases passées en écriture (OD)** : intégrées via le mapping compte→grille
+   du `Belgian VAT Settings` (§ 3.1).
+5. Application des `adjustments` manuels.
+6. Calcul des totaux 71 / 72 (taxe due / sommes dues par l'État).
+7. Un contrôle de cohérence au centime (TVA comptabilisée vs base × taux)
+   signale, sans bloquer, une TVA comptabilisée sur un compte hors
+   `Belgian VAT Settings`.
+8. Statut → `Ready`.
 
 ### 5.3 Ajouts manuels (régularisations)
 
