@@ -127,7 +127,8 @@ class BelgianVATDeclaration(Document):
 		     the Tax Definition's grid_tags (matched on amount_type ×
 		     document_type).
 		  4. Apply manual adjustments.
-		  5. Apply total formulas (g_71, g_72).
+		  5. Round each grid to the cent, as declared to INTERVAT.
+		  6. Apply total formulas (g_71, g_72) over the rounded grids.
 
 		For now steps 2-3 are stubbed: we leave the grid fields at zero unless
 		manual adjustments are present. The materialisation hook that links a
@@ -137,6 +138,7 @@ class BelgianVATDeclaration(Document):
 		self._reset_grids()
 		self._extract_from_gl_entries()
 		self._apply_adjustments()
+		self._round_grids()
 		self._apply_total_formulas()
 		self.status = "Ready"
 		# Persist the freshly-computed grids so that downstream consumers
@@ -268,11 +270,25 @@ class BelgianVATDeclaration(Document):
 			current = flt(self.get(fieldname))
 			self.set(fieldname, current + flt(adj.amount))
 
+	def _round_grids(self):
+		# INTERVAT amounts are euro cents: the XML declares every grid rounded
+		# to 2 decimals, and grid 71/72 must satisfy the arithmetic check over
+		# those *declared* values. Round the aggregated grids (not individual
+		# lines, which would compound rounding error) before deriving totals,
+		# so stored values, UI and XML all agree.
+		for code in GRID_CODES:
+			if code in TOTAL_GRID_CODES:
+				continue
+			fieldname = grid_to_fieldname(code)
+			self.set(fieldname, flt(self.get(fieldname), 2))
+
 	def _apply_total_formulas(self):
-		# Cadre VI — net balance.
+		# Cadre VI — net balance. Operands are cent-rounded by _round_grids;
+		# flt(…, 2) only strips float summation noise, so 71/72 always equal
+		# the formula INTERVAT recomputes over the declared grid values.
 		due = sum(flt(self.get(grid_to_fieldname(code))) for code in ("54", "55", "56", "57", "61", "63"))
 		deductible = sum(flt(self.get(grid_to_fieldname(code))) for code in ("59", "62", "64"))
-		net = due - deductible
+		net = flt(due - deductible, 2)
 		self.g_71 = max(net, 0)
 		self.g_72 = max(-net, 0)
 
