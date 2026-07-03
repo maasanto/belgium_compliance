@@ -19,6 +19,7 @@ TEST_TAX_ID = "BE0123456789"
 OUTPUT_VAT_ACCOUNT_NAME = "BE Output VAT Test"
 INPUT_VAT_ACCOUNT_NAME = "BE Input VAT Test"
 RC_DUE_ACCOUNT_NAME = "BE RC VAT Due Test"
+DOMESTIC_RC_DUE_ACCOUNT_NAME = "BE Domestic RC VAT Due Test"
 RC_DEDUCTIBLE_ACCOUNT_NAME = "BE RC VAT Deductible Test"
 
 
@@ -96,6 +97,7 @@ def ensure_vat_settings() -> str:
 	output_vat = _ensure_account(OUTPUT_VAT_ACCOUNT_NAME, "Tax", "Liability", company)
 	input_vat = _ensure_account(INPUT_VAT_ACCOUNT_NAME, "Tax", "Asset", company)
 	rc_due = _ensure_account(RC_DUE_ACCOUNT_NAME, "Tax", "Liability", company)
+	domestic_rc_due = _ensure_account(DOMESTIC_RC_DUE_ACCOUNT_NAME, "Tax", "Liability", company)
 	rc_ded = _ensure_account(RC_DEDUCTIBLE_ACCOUNT_NAME, "Tax", "Asset", company)
 
 	if not frappe.db.exists("Belgian VAT Settings", company):
@@ -106,11 +108,17 @@ def ensure_vat_settings() -> str:
 				"output_vat_account": output_vat,
 				"input_vat_deductible_account": input_vat,
 				"reverse_charge_vat_due_account": rc_due,
+				"domestic_reverse_charge_vat_due_account": domestic_rc_due,
 				"reverse_charge_vat_deductible_account": rc_ded,
 			}
 		)
 		settings.flags.ignore_permissions = True
 		settings.insert()
+	elif not frappe.db.get_value("Belgian VAT Settings", company, "domestic_reverse_charge_vat_due_account"):
+		# Backfill for a test site that created the settings before this field existed.
+		frappe.db.set_value(
+			"Belgian VAT Settings", company, "domestic_reverse_charge_vat_due_account", domestic_rc_due
+		)
 
 	return company
 

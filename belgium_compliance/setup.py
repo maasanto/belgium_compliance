@@ -173,8 +173,17 @@ def _accounts_for(definition, settings) -> list[tuple[str, str]]:
 		return [("output", settings.output_vat_account)]
 
 	if definition.tax_type in REVERSE_CHARGE_TYPES:
+		# Belgian PCMN splits reverse-charge VAT due: domestic cocontractant
+		# (art. 20 AR n°1) posts to 4510 (boxes 56/87) while intra-EU
+		# acquisitions/services and imports post to 4513 (boxes 55/86).
+		due_account = settings.reverse_charge_vat_due_account
+		if (
+			definition.tax_type == "Reverse Charge Domestic"
+			and settings.domestic_reverse_charge_vat_due_account
+		):
+			due_account = settings.domestic_reverse_charge_vat_due_account
 		return [
-			("rc_due", settings.reverse_charge_vat_due_account),
+			("rc_due", due_account),
 			("rc_deductible", settings.reverse_charge_vat_deductible_account),
 		]
 

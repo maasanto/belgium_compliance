@@ -15,6 +15,7 @@
   "input_vat_investment_account",
   "section_reverse_charge",
   "reverse_charge_vat_due_account",
+  "domestic_reverse_charge_vat_due_account",
   "reverse_charge_vat_deductible_account"
  ],
  "fields": [
@@ -71,7 +72,14 @@
    "label": "Reverse Charge VAT Due Account",
    "options": "Account",
    "reqd": 1,
-   "description": "Account credited for the autoliquidated VAT due (cocontractant, intra-EU acquisitions, imports under report-of-perception). Typical PCMN 4514 or a dedicated suspense account 4951."
+   "description": "Account credited for the autoliquidated VAT due on intra-EU acquisitions, intra-EU services and imports under report-of-perception (PCMN 4513 — TVA due sur acquisitions intracommunautaires, declaration boxes 55/86). Also the fallback for domestic cocontractant VAT when no dedicated account is set below."
+  },
+  {
+   "fieldname": "domestic_reverse_charge_vat_due_account",
+   "fieldtype": "Link",
+   "label": "Domestic Reverse Charge VAT Due Account (Cocontractant)",
+   "options": "Account",
+   "description": "Optional. Account credited for the autoliquidated VAT due on domestic cocontractant purchases — art. 20 AR n°1, e.g. construction work (PCMN 4510 — TVA due cocontractant, declaration boxes 56/87). Defaults to the Reverse Charge VAT Due Account if left empty."
   },
   {
    "fieldname": "reverse_charge_vat_deductible_account",
@@ -83,7 +91,7 @@
   }
  ],
  "links": [],
- "modified": "2026-04-30 12:00:00.000000",
+ "modified": "2026-07-03 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "Belgium Compliance",
  "name": "Belgian VAT Settings",
