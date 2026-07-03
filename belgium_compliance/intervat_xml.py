@@ -186,6 +186,10 @@ def _append_period(vat_decl, declaration):
 
 def _append_data(vat_decl, declaration):
 	data = etree.SubElement(vat_decl, f"{{{NS_VAT}}}Data")
+	# The declaration controller rounds every grid to the cent in compute()
+	# (_round_grids) before deriving 71/72, so the {:.2f} formatting below is a
+	# no-op and the emitted amounts always satisfy INTERVAT's arithmetic check
+	# on grid 71/72. Don't feed this function unrounded grid values.
 	# Aggregate by INTERVAT grid number (collapses 46L+46T → 46)
 	by_intervat: dict[str, Decimal] = {}
 	for grid_code in GRID_FIELDS:
