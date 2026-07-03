@@ -146,6 +146,33 @@ class TestTotalFormulas(FrappeTestCase):
 		self.assertGreaterEqual(decl.g_71, 0)
 		self.assertGreaterEqual(decl.g_72, 0)
 
+	def test_g_71_consistent_with_declared_grid_values(self):
+		# Regression for issue #2: grids carrying sub-cent precision must be
+		# rounded before deriving 71/72, otherwise the XML declares a grid 71
+		# that fails INTERVAT's check 71 = (54+55+56+57+61+63) − (59+62+64)
+		# over the independently-rounded box values.
+		decl = self._new_decl()
+		decl.set("g_54", 28538.39417)
+		decl.set("g_55", 3296.79)
+		decl.set("g_56", 521.8941)
+		decl.set("g_63", 218.6524)
+		decl.set("g_59", 12571.0774)
+		decl.set("g_64", 1899.11757)
+		decl._round_grids()
+		decl._apply_total_formulas()
+
+		# Each box is declared rounded to the cent (55/63 were already exact)...
+		self.assertEqual(decl.g_54, 28538.39)
+		self.assertEqual(decl.g_55, 3296.79)
+		self.assertEqual(decl.g_56, 521.89)
+		self.assertEqual(decl.g_63, 218.65)
+		self.assertEqual(decl.g_59, 12571.08)
+		self.assertEqual(decl.g_64, 1899.12)
+		# ...and 71 equals the formula over those declared values, not the
+		# 18105.54 the raw floats would have produced.
+		self.assertEqual(decl.g_71, 18105.52)
+		self.assertEqual(decl.g_72, 0)
+
 
 class TestComputeSmoke(FrappeTestCase):
 	"""Compute on an empty period — no invoices, no adjustments, all grids zero."""
@@ -195,3 +222,31 @@ class TestComputeSmoke(FrappeTestCase):
 		decl.set("g_03", 999)
 		decl.compute()
 		self.assertEqual(decl.get_grid_value("03"), 0)
+
+	def test_compute_rounds_grids_to_the_cent(self):
+		# Full compute() path (issue #2): sub-cent amounts entering the grids
+		# through adjustments must come out cent-rounded, with 71 derived from
+		# the rounded values.
+		decl = frappe.get_doc(
+			{
+				"doctype": "Belgian VAT Declaration",
+				"company": TEST_COMPANY,
+				"period_type": "Quarterly",
+				"period_year": 2099,  # far-future period — guaranteed empty
+				"period_month_or_quarter": 3,
+				"status": "Draft",
+				"adjustments": [
+					{"grid": "54", "amount_type": "Tax", "amount": 28538.39417, "reason": "test"},
+					{"grid": "59", "amount_type": "Tax", "amount": 12571.0774, "reason": "test"},
+				],
+			}
+		)
+		decl.flags.ignore_permissions = True
+		decl.insert()
+		decl.compute()
+
+		self.assertEqual(decl.get_grid_value("54"), 28538.39)
+		self.assertEqual(decl.get_grid_value("59"), 12571.08)
+		# 71 must match the formula over the declared (rounded) values:
+		# 28538.39 − 12571.08.
+		self.assertEqual(decl.get_grid_value("71"), 15967.31)

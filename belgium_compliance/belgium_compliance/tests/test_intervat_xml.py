@@ -11,6 +11,7 @@ Two layers of tests:
 """
 
 import unittest
+from decimal import Decimal
 from types import SimpleNamespace
 
 from lxml import etree
@@ -173,6 +174,37 @@ class TestBuildXml(FrappeTestCase):
 		ask = root.find(f".//{{{NS_VAT}}}Ask")
 		self.assertEqual(ask.attrib["Restitution"], "NO")
 		self.assertEqual(ask.attrib["Payment"], "NO")
+
+	def test_grid_71_satisfies_intervat_check_over_declared_amounts(self):
+		# End-to-end regression for issue #2: grids fed with sub-cent precision
+		# must yield an XML where grid 71 equals INTERVAT's arithmetic check
+		# 71 = (54+55+56+57+61+63) − (59+62+64) computed over the *declared*
+		# (2-decimal) amounts — that is what INTERVAT validates on submission.
+		decl = frappe.get_doc(
+			{
+				"doctype": "Belgian VAT Declaration",
+				"company": TEST_COMPANY,
+				"period_type": "Quarterly",
+				"period_year": 2098,  # far-future period — guaranteed empty
+				"period_month_or_quarter": 1,
+				"status": "Draft",
+				"adjustments": [
+					{"grid": "54", "amount_type": "Tax", "amount": 28538.39417, "reason": "test"},
+					{"grid": "56", "amount_type": "Tax", "amount": 521.8941, "reason": "test"},
+					{"grid": "59", "amount_type": "Tax", "amount": 12571.0774, "reason": "test"},
+					{"grid": "64", "amount_type": "Tax", "amount": 1899.11757, "reason": "test"},
+				],
+			}
+		)
+		decl.flags.ignore_permissions = True
+		decl.insert()
+		decl.compute()
+
+		root = etree.fromstring(build_xml(decl))
+		declared = {a.attrib["GridNumber"]: Decimal(a.text) for a in root.findall(f".//{{{NS_VAT}}}Amount")}
+		check_71 = (declared["54"] + declared["56"]) - (declared["59"] + declared["64"])
+		self.assertEqual(declared["71"], check_71)
+		self.assertEqual(declared["71"], Decimal("14590.08"))
 
 	def test_throws_when_company_has_no_tax_id(self):
 		company = frappe.get_doc("Company", TEST_COMPANY)
