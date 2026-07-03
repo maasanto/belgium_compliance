@@ -57,10 +57,18 @@ settings.company = "Ma Société Belge"
 settings.output_vat_account            = "4511 - TVA collectée - MSB"
 settings.input_vat_deductible_account  = "4116 - TVA à récupérer - MSB"
 settings.input_vat_investment_account  = "4117 - TVA inv. - MSB"  # optionnel
-settings.reverse_charge_vat_due_account        = "4514 - TVA autol. due - MSB"
+settings.reverse_charge_vat_due_account        = "4513 - TVA due s/acquis. intracom. - MSB"
+settings.domestic_reverse_charge_vat_due_account = "4510 - TVA due cocontractant - MSB"  # optionnel
 settings.reverse_charge_vat_deductible_account = "4116 - TVA à récupérer - MSB"
 settings.insert()
 ```
+
+Le compte `domestic_reverse_charge_vat_due_account` est optionnel : il reçoit
+la TVA due autoliquidée des achats cocontractant (art. 20 AR n°1, grilles
+56/87), tandis que `reverse_charge_vat_due_account` reste utilisé pour les
+acquisitions intracommunautaires, services intracommunautaires et imports
+(grilles 55/86). S'il est vide, tout part sur `reverse_charge_vat_due_account`
+(comportement historique).
 
 Un seul `Belgian VAT Settings` par société (la company sert de clé primaire).
 Les comptes peuvent pointer sur les mêmes ou des comptes distincts selon le
