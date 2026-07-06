@@ -31,8 +31,10 @@ from belgium_compliance.belgium_compliance.tests.utils import (
 )
 from belgium_compliance.setup import materialise_for_company
 
-# FY 2026 exists on the test site (JE/invoice posting needs a fiscal year).
-PERIOD_YEAR = 2026
+# A far-future year the site is guaranteed not to ship a Fiscal Year for, so
+# _ensure_fiscal_year always creates a fresh global one rather than mutating a
+# shipped fixture. Each test runs in its own rolled-back transaction.
+PERIOD_YEAR = 2035
 PERIOD_QUARTER = 1
 POSTING_DATE = date(PERIOD_YEAR, 2, 15)
 
@@ -53,6 +55,49 @@ def _ensure_neutral_accounts() -> tuple[str, str]:
 	return bank, income
 
 
+def _ensure_fiscal_year(year: int) -> None:
+	"""Guarantee the test period falls in an active Fiscal Year for the company.
+
+	A bare CI site has no Fiscal Year covering the period, or one restricted to
+	other companies (ERPNext's shipped `2026` is scoped to `_Test Company`), so
+	posting a JE/invoice raises FiscalYearError. Decide off the DB — never off
+	`get_fiscal_year`, whose per-company cache can outlive a class rollback and
+	report a year that no longer exists — then clear that cache so the posting
+	sees the change."""
+	name = str(year)
+	if not frappe.db.exists("Fiscal Year", name):
+		frappe.get_doc(
+			{
+				"doctype": "Fiscal Year",
+				"year": name,
+				"year_start_date": date(year, 1, 1),
+				"year_end_date": date(year, 12, 31),
+			}
+		).insert(ignore_permissions=True)
+	else:
+		fiscal_year = frappe.get_doc("Fiscal Year", name)
+		# A non-empty companies list restricts the year to those companies —
+		# add ours. An empty list means the year is global and already applies.
+		if fiscal_year.companies and not any(row.company == TEST_COMPANY for row in fiscal_year.companies):
+			fiscal_year.append("companies", {"company": TEST_COMPANY})
+			fiscal_year.save(ignore_permissions=True)
+
+	frappe.cache().delete_value("fiscal_years")
+
+
+def _ensure_uom() -> str:
+	"""Return a usable UOM, creating 'Nos' if the site ships none enabled."""
+	existing = frappe.db.get_value("UOM", {"enabled": 1}, "name")
+	if existing:
+		return existing
+	if frappe.db.exists("UOM", "Nos"):
+		return "Nos"
+	uom = frappe.get_doc({"doctype": "UOM", "uom_name": "Nos", "enabled": 1})
+	uom.flags.ignore_permissions = True
+	uom.insert()
+	return uom.name
+
+
 class BookedVatTestCase(FrappeTestCase):
 	"""Shared scaffolding + self-cleaning helpers for the booked-VAT tests."""
 
@@ -60,6 +105,7 @@ class BookedVatTestCase(FrappeTestCase):
 	def setUpClass(cls):
 		super().setUpClass()
 		ensure_vat_settings()
+		_ensure_fiscal_year(PERIOD_YEAR)
 		cls.bank, cls.income = _ensure_neutral_accounts()
 		cls.output_vat = _acct(OUTPUT_VAT_ACCOUNT_NAME)
 		cls.input_vat = _acct(INPUT_VAT_ACCOUNT_NAME)
@@ -370,7 +416,7 @@ def _ensure_service_item(income_account: str) -> str:
 			"doctype": "Item",
 			"item_code": code,
 			"item_group": frappe.db.get_value("Item Group", {"is_group": 0}, "name"),
-			"stock_uom": frappe.db.get_value("UOM", {"enabled": 1}, "name") or "Nos",
+			"stock_uom": _ensure_uom(),
 			"is_stock_item": 0,
 			"is_sales_item": 1,
 		}
