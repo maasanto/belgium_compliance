@@ -27,12 +27,20 @@ from belgium_compliance.belgium_compliance.tests.utils import (
 	OUTPUT_VAT_ACCOUNT_NAME,
 	TEST_COMPANY,
 	_ensure_account,
+	destroy_declaration,
+	destroy_submittable,
+	ensure_bank_account,
+	ensure_fiscal_year,
+	ensure_income_account,
 	ensure_vat_settings,
+	make_declaration,
+	make_sales_invoice,
+	template_for_definition,
 )
 from belgium_compliance.setup import materialise_for_company
 
 # A far-future year the site is guaranteed not to ship a Fiscal Year for, so
-# _ensure_fiscal_year always creates a fresh global one rather than mutating a
+# ensure_fiscal_year always creates a fresh global one rather than mutating a
 # shipped fixture. Each test runs in its own rolled-back transaction.
 PERIOD_YEAR = 2035
 PERIOD_QUARTER = 1
@@ -47,77 +55,6 @@ def _acct(name: str) -> str:
 	return f"{name} - {_abbr()}"
 
 
-def _ensure_neutral_accounts() -> tuple[str, str]:
-	"""A non-VAT bank and a non-VAT income account, used to balance the test
-	Journal Entries without polluting the VAT boxes."""
-	bank = _ensure_account("BE Test Bank", "Bank", "Asset", TEST_COMPANY)
-	income = _ensure_account("BE Test Revenue", "", "Income", TEST_COMPANY)
-	return bank, income
-
-
-def _ensure_fiscal_year(year: int) -> None:
-	"""Guarantee the test period falls in an active Fiscal Year for the company.
-
-	A bare CI site has no Fiscal Year covering the period, or one restricted to
-	other companies (ERPNext's shipped `2026` is scoped to `_Test Company`), so
-	posting a JE/invoice raises FiscalYearError. Decide off the DB — never off
-	`get_fiscal_year`, whose per-company cache can outlive a class rollback and
-	report a year that no longer exists — then clear that cache so the posting
-	sees the change."""
-	name = str(year)
-	if not frappe.db.exists("Fiscal Year", name):
-		frappe.get_doc(
-			{
-				"doctype": "Fiscal Year",
-				"year": name,
-				"year_start_date": date(year, 1, 1),
-				"year_end_date": date(year, 12, 31),
-			}
-		).insert(ignore_permissions=True)
-	else:
-		fiscal_year = frappe.get_doc("Fiscal Year", name)
-		# A non-empty companies list restricts the year to those companies —
-		# add ours. An empty list means the year is global and already applies.
-		if fiscal_year.companies and not any(row.company == TEST_COMPANY for row in fiscal_year.companies):
-			fiscal_year.append("companies", {"company": TEST_COMPANY})
-			fiscal_year.save(ignore_permissions=True)
-
-	frappe.cache().delete_value("fiscal_years")
-
-
-def _ensure_uom() -> str:
-	"""Return a usable UOM, creating 'Nos' if the site ships none enabled."""
-	existing = frappe.db.get_value("UOM", {"enabled": 1}, "name")
-	if existing:
-		return existing
-	if frappe.db.exists("UOM", "Nos"):
-		return "Nos"
-	uom = frappe.get_doc({"doctype": "UOM", "uom_name": "Nos", "enabled": 1})
-	uom.flags.ignore_permissions = True
-	uom.insert()
-	return uom.name
-
-
-def _ensure_selling_price_list() -> str:
-	"""Return an enabled selling Price List, creating one if the site ships none
-	(a bare install without the setup wizard has no default price list)."""
-	existing = frappe.db.get_value("Price List", {"selling": 1, "enabled": 1}, "name")
-	if existing:
-		return existing
-	name = "BE Test Selling"
-	if not frappe.db.exists("Price List", name):
-		frappe.get_doc(
-			{
-				"doctype": "Price List",
-				"price_list_name": name,
-				"selling": 1,
-				"enabled": 1,
-				"currency": "EUR",
-			}
-		).insert(ignore_permissions=True)
-	return name
-
-
 class BookedVatTestCase(FrappeTestCase):
 	"""Shared scaffolding + self-cleaning helpers for the booked-VAT tests."""
 
@@ -125,8 +62,9 @@ class BookedVatTestCase(FrappeTestCase):
 	def setUpClass(cls):
 		super().setUpClass()
 		ensure_vat_settings()
-		_ensure_fiscal_year(PERIOD_YEAR)
-		cls.bank, cls.income = _ensure_neutral_accounts()
+		ensure_fiscal_year(PERIOD_YEAR)
+		cls.bank = ensure_bank_account()
+		cls.income = ensure_income_account()
 		cls.output_vat = _acct(OUTPUT_VAT_ACCOUNT_NAME)
 		cls.input_vat = _acct(INPUT_VAT_ACCOUNT_NAME)
 
@@ -152,48 +90,13 @@ class BookedVatTestCase(FrappeTestCase):
 		je.flags.ignore_permissions = True
 		je.insert()
 		je.submit()
-		self.addCleanup(self._destroy_submittable, "Journal Entry", je.name)
+		self.addCleanup(destroy_submittable, "Journal Entry", je.name)
 		return je
 
 	def _new_declaration(self):
-		name = f"TVA-BE-{_abbr()}-{PERIOD_YEAR}-Q{PERIOD_QUARTER}"
-		# A prior aborted run may have left this committed — start clean.
-		if frappe.db.exists("Belgian VAT Declaration", name):
-			frappe.delete_doc("Belgian VAT Declaration", name, force=True, delete_permanently=True)
-		decl = frappe.get_doc(
-			{
-				"doctype": "Belgian VAT Declaration",
-				"company": TEST_COMPANY,
-				"period_type": "Quarterly",
-				"period_year": PERIOD_YEAR,
-				"period_month_or_quarter": PERIOD_QUARTER,
-				"status": "Draft",
-			}
-		)
-		decl.flags.ignore_permissions = True
-		decl.insert()
-		self.addCleanup(self._destroy_declaration, decl.name)
-		return decl
-
-	@staticmethod
-	def _destroy_submittable(doctype: str, name: str):
-		if not frappe.db.exists(doctype, name):
-			return
-		doc = frappe.get_doc(doctype, name)
-		if doc.docstatus == 1:
-			doc.cancel()
-		# Cancellation already excludes the doc from compute (is_cancelled=1).
-		# Dokos seals accounting documents, so a hard delete is refused — that's
-		# fine, the cancelled row no longer contributes to any box.
-		try:
-			frappe.delete_doc(doctype, name, force=True, delete_permanently=True)
-		except frappe.ValidationError:
-			pass
-
-	@staticmethod
-	def _destroy_declaration(name: str):
-		if frappe.db.exists("Belgian VAT Declaration", name):
-			frappe.delete_doc("Belgian VAT Declaration", name, force=True, delete_permanently=True)
+		declaration = make_declaration(PERIOD_YEAR, PERIOD_QUARTER)
+		self.addCleanup(destroy_declaration, declaration.name)
+		return declaration
 
 
 class TestBookedVatFromLedger(BookedVatTestCase):
@@ -401,81 +304,13 @@ class TestBookedVatInvoiceRounding(BookedVatTestCase):
 	def setUpClass(cls):
 		super().setUpClass()
 		materialise_for_company(TEST_COMPANY)
-		cls.sales_template_21 = cls._sales_template_21()
-
-	@classmethod
-	def _sales_template_21(cls) -> str:
-		definition = frappe.db.get_value(
-			"Belgian VAT Tax Definition",
-			{"direction": "Sales", "tax_type": "Standard", "rate": 21},
-			"name",
-		)
-		assert definition, "no Standard 21% Sales definition in fixtures"
-		return frappe.db.get_value(
-			"Belgian VAT Tax Template Link",
-			{
-				"company": TEST_COMPANY,
-				"tax_definition": definition,
-				"tax_template_doctype": "Sales Taxes and Charges Template",
-			},
-			"tax_template",
+		cls.sales_template_21 = template_for_definition(
+			"be_vat_sales_21_goods", "Sales Taxes and Charges Template"
 		)
 
 	def _create_sales_invoice(self, base_net: float):
-		customer = _ensure_customer()
-		item = _ensure_service_item(self.income)
-		cost_center = frappe.db.get_value("Company", TEST_COMPANY, "cost_center")
-
-		invoice = frappe.get_doc(
-			{
-				"doctype": "Sales Invoice",
-				"company": TEST_COMPANY,
-				"customer": customer,
-				"set_posting_time": 1,
-				"posting_date": POSTING_DATE,
-				"due_date": POSTING_DATE,
-				# Pin currency + pricing explicitly so a bare site (no default
-				# price list / exchange rate) needs no master lookups, and no
-				# round-off account (disabled) is required.
-				"currency": "EUR",
-				"conversion_rate": 1.0,
-				"selling_price_list": _ensure_selling_price_list(),
-				"price_list_currency": "EUR",
-				"plc_conversion_rate": 1.0,
-				"ignore_pricing_rule": 1,
-				"disable_rounded_total": 1,
-				"update_stock": 0,
-				"taxes_and_charges": self.sales_template_21,
-				"items": [
-					{
-						"item_code": item,
-						"qty": 1,
-						"rate": base_net,
-						"price_list_rate": base_net,
-						"income_account": self.income,
-						"cost_center": cost_center,
-					}
-				],
-			}
-		)
-		# Pull the template's tax rows explicitly so the VAT posts regardless of
-		# whether server-side auto-population runs in the test harness.
-		template = frappe.get_doc("Sales Taxes and Charges Template", self.sales_template_21)
-		for row in template.taxes:
-			invoice.append(
-				"taxes",
-				{
-					"charge_type": row.charge_type,
-					"account_head": row.account_head,
-					"rate": row.rate,
-					"description": row.description,
-					"category": row.get("category"),
-				},
-			)
-		invoice.flags.ignore_permissions = True
-		invoice.insert()
-		invoice.submit()
-		self.addCleanup(self._destroy_submittable, "Sales Invoice", invoice.name)
+		invoice = make_sales_invoice([{"qty": 1, "rate": base_net}], self.sales_template_21, POSTING_DATE)
+		self.addCleanup(destroy_submittable, "Sales Invoice", invoice.name)
 		return invoice
 
 	def test_box_54_equals_booked_vat_not_recomputed(self):
@@ -496,55 +331,3 @@ class TestBookedVatInvoiceRounding(BookedVatTestCase):
 		self.assertNotEqual(decl.get_grid_value("54"), 21.0105)
 		# Base still comes from the invoice line.
 		self.assertEqual(decl.get_grid_value("03"), 100.05)
-
-
-def _ensure_leaf(doctype: str, name_field: str, parent_field: str) -> str:
-	"""Return a leaf node of a nested-set master (Item Group / Customer Group /
-	Territory), creating one under the root if the site ships none — a bare CI
-	install has the tree roots but not always the child leaves these tests need."""
-	existing = frappe.db.get_value(doctype, {"is_group": 0}, "name")
-	if existing:
-		return existing
-	fallback = f"BE Test {doctype}"
-	if frappe.db.exists(doctype, fallback):
-		return fallback
-	parent = frappe.db.get_value(doctype, {"is_group": 1}, "name")
-	doc = frappe.get_doc({"doctype": doctype, name_field: fallback, parent_field: parent, "is_group": 0})
-	doc.insert(ignore_permissions=True)
-	return doc.name
-
-
-def _ensure_customer() -> str:
-	name = "BE Test Customer"
-	if frappe.db.exists("Customer", name):
-		return name
-	customer = frappe.get_doc(
-		{
-			"doctype": "Customer",
-			"customer_name": name,
-			"customer_group": _ensure_leaf("Customer Group", "customer_group_name", "parent_customer_group"),
-			"territory": _ensure_leaf("Territory", "territory_name", "parent_territory"),
-		}
-	)
-	customer.flags.ignore_permissions = True
-	customer.insert()
-	return customer.name
-
-
-def _ensure_service_item(income_account: str) -> str:
-	code = "BE Test Service"
-	if frappe.db.exists("Item", code):
-		return code
-	item = frappe.get_doc(
-		{
-			"doctype": "Item",
-			"item_code": code,
-			"item_group": _ensure_leaf("Item Group", "item_group_name", "parent_item_group"),
-			"stock_uom": _ensure_uom(),
-			"is_stock_item": 0,
-			"is_sales_item": 1,
-		}
-	)
-	item.flags.ignore_permissions = True
-	item.insert()
-	return item.name

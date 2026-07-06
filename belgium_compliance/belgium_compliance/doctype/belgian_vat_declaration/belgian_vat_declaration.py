@@ -269,7 +269,12 @@ class BelgianVATDeclaration(Document):
 					continue
 
 				definition = frappe.get_cached_doc("Belgian VAT Tax Definition", definition_name)
-				base = abs(flt(item.base_net_amount))
+				# Return documents store their lines negative while the Refund
+				# grid tags expect positive contributions — flip the whole
+				# document, never each line: an ordinary negative line (discount,
+				# returned empties) must keep its sign and net against the base
+				# box its positive siblings feed, not inflate it (issue #18).
+				base = flt(item.base_net_amount) * (-1 if inv.is_return else 1)
 				tax = base * flt(definition.rate) / 100.0
 
 				for tag in definition.grid_tags:
