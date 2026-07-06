@@ -68,7 +68,12 @@ class InvoiceLineExtractionTestCase(FrappeTestCase):
 	def _allow_negative_rates(cls):
 		# ERPNext refuses negative unit rates unless this toggle is on — sites
 		# that book discount/consigne lines (the scenario under test) enable it.
+		# Upstream v15 carries the field on Selling Settings only (one global
+		# guard for all doctypes); newer forks split it per direction and add
+		# it to Buying Settings — set whichever exist.
 		for doctype in ("Selling Settings", "Buying Settings"):
+			if not frappe.get_meta(doctype).has_field("allow_negative_rates_for_items"):
+				continue
 			previous = frappe.db.get_single_value(doctype, "allow_negative_rates_for_items")
 			frappe.db.set_single_value(doctype, "allow_negative_rates_for_items", 1)
 			cls.addClassCleanup(
