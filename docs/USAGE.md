@@ -74,6 +74,19 @@ Un seul `Belgian VAT Settings` par société (la company sert de clé primaire).
 Les comptes peuvent pointer sur les mêmes ou des comptes distincts selon le
 niveau de détail souhaité dans les balances âgées.
 
+#### Compte courant TVA (centralisation) — optionnel
+
+```python
+settings.vat_settlement_account = "4519 - Compte courant TVA - MSB"
+```
+
+L'OD périodique de **centralisation** (solder 4511 / 4116 vers le compte
+courant 4519 en fin de période) est un transfert, pas un événement TVA. Sans
+ce paramètre, ses jambes seraient lues comme régularisations (grilles 63 / 64).
+Avec le compte renseigné, toute pièce qui touche le compte courant est exclue
+de la lecture des comptes TVA. Ne pas y mettre un des comptes TVA ci-dessus
+(la validation le refuse).
+
 #### Mapping des bases passées en écriture (OD) — optionnel
 
 La table **Journal Entry Base Mapping** route les bases comptabilisées

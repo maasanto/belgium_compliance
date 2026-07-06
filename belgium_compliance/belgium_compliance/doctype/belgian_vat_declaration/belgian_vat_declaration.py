@@ -328,12 +328,37 @@ class BelgianVATDeclaration(Document):
 		if not routing:
 			return
 
-		for entry in self._fetch_gl_entries(list(routing)):
+		entries = self._fetch_gl_entries(list(routing))
+		settled_vouchers = self._settlement_vouchers(settings, entries)
+
+		for entry in entries:
+			if entry.voucher_no in settled_vouchers:
+				continue
 			credit_grid, debit_grid = routing[entry.account]
 			for amount, grid in ((flt(entry.credit), credit_grid), (flt(entry.debit), debit_grid)):
 				if not amount or not grid:
 					continue
 				self._add_ledger_line(grid, "Tax", entry, amount)
+
+	def _settlement_vouchers(self, settings, entries) -> set[str]:
+		"""Vouchers that also post to the VAT settlement account (compte
+		courant TVA). Those are the periodic centralisation OD and its
+		payment — transfers between VAT accounts, not VAT events — and must
+		not land in the regularisation boxes 63/64."""
+		settlement_account = settings.get("vat_settlement_account")
+		if not settlement_account or not entries:
+			return set()
+		return set(
+			frappe.get_all(
+				"GL Entry",
+				filters={
+					"account": settlement_account,
+					"voucher_no": ["in", list({e.voucher_no for e in entries})],
+					"is_cancelled": 0,
+				},
+				pluck="voucher_no",
+			)
+		)
 
 	def _extract_bases_from_journal_entries(self):
 		"""Include VAT-relevant Journal Entry bases via the account→grid map.

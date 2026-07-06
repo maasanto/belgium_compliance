@@ -315,6 +315,83 @@ class TestJournalEntryBaseMapping(BookedVatTestCase):
 			settings.save()
 
 
+class TestSettlementVoucherExclusion(BookedVatTestCase):
+	"""The periodic centralisation OD — clearing the VAT accounts into the
+	compte courant TVA (PCMN 4519) — is a settlement transfer, not a VAT
+	event: its legs must not land in the regularisation boxes 63/64.
+
+	Covers issue #16."""
+
+	@classmethod
+	def setUpClass(cls):
+		super().setUpClass()
+		cls.settlement = _ensure_account("BE Test VAT Current Account", "Tax", "Liability", TEST_COMPANY)
+
+	def _set_settlement_account(self, account: str | None):
+		settings = frappe.get_doc("Belgian VAT Settings", TEST_COMPANY)
+		settings.vat_settlement_account = account
+		settings.flags.ignore_permissions = True
+		settings.save()
+		self.addCleanup(self._clear_settlement_account)
+
+	@staticmethod
+	def _clear_settlement_account():
+		frappe.db.set_value("Belgian VAT Settings", TEST_COMPANY, "vat_settlement_account", None)
+
+	def _post_quarter_activity_and_centralisation(self):
+		# Normal activity: 210 output VAT collected, 100 input VAT deducted.
+		self._post_journal_entry(
+			[
+				{"account": self.bank, "debit": 210},
+				{"account": self.output_vat, "credit": 210},
+			]
+		)
+		self._post_journal_entry(
+			[
+				{"account": self.input_vat, "debit": 100},
+				{"account": self.bank, "credit": 100},
+			]
+		)
+		# Quarter-end centralisation OD: clear both VAT accounts into the
+		# current account. Without the exclusion this reads as 64 += 210,
+		# 63 += 100.
+		self._post_journal_entry(
+			[
+				{"account": self.output_vat, "debit": 210},
+				{"account": self.input_vat, "credit": 100},
+				{"account": self.settlement, "credit": 110},
+			]
+		)
+
+	def test_settlement_voucher_is_excluded_from_vat_boxes(self):
+		self._set_settlement_account(self.settlement)
+		self._post_quarter_activity_and_centralisation()
+		decl = self._new_declaration()
+		decl.compute()
+		self.assertEqual(decl.get_grid_value("54"), 210)
+		self.assertEqual(decl.get_grid_value("59"), 100)
+		self.assertEqual(decl.get_grid_value("64"), 0)
+		self.assertEqual(decl.get_grid_value("63"), 0)
+
+	def test_without_settlement_account_transfer_lands_in_boxes(self):
+		# Documented fallback: with no settlement account configured the
+		# centralisation legs are read as regularisations (historic behaviour).
+		self._set_settlement_account(None)
+		self._post_quarter_activity_and_centralisation()
+		decl = self._new_declaration()
+		decl.compute()
+		self.assertEqual(decl.get_grid_value("64"), 210)
+		self.assertEqual(decl.get_grid_value("63"), 100)
+
+	def test_settlement_account_must_not_be_a_vat_account(self):
+		self.addCleanup(self._clear_settlement_account)
+		settings = frappe.get_doc("Belgian VAT Settings", TEST_COMPANY)
+		settings.vat_settlement_account = self.output_vat
+		settings.flags.ignore_permissions = True
+		with self.assertRaises(frappe.ValidationError):
+			settings.save()
+
+
 class TestBookedVatInvoiceRounding(BookedVatTestCase):
 	"""The canonical regression: box 54 must equal the VAT booked on the
 	invoice, not the per-line base × rate recomputation that carries sub-cent
