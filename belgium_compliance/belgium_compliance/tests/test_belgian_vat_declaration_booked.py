@@ -98,6 +98,26 @@ def _ensure_uom() -> str:
 	return uom.name
 
 
+def _ensure_selling_price_list() -> str:
+	"""Return an enabled selling Price List, creating one if the site ships none
+	(a bare install without the setup wizard has no default price list)."""
+	existing = frappe.db.get_value("Price List", {"selling": 1, "enabled": 1}, "name")
+	if existing:
+		return existing
+	name = "BE Test Selling"
+	if not frappe.db.exists("Price List", name):
+		frappe.get_doc(
+			{
+				"doctype": "Price List",
+				"price_list_name": name,
+				"selling": 1,
+				"enabled": 1,
+				"currency": "EUR",
+			}
+		).insert(ignore_permissions=True)
+	return name
+
+
 class BookedVatTestCase(FrappeTestCase):
 	"""Shared scaffolding + self-cleaning helpers for the booked-VAT tests."""
 
@@ -337,13 +357,24 @@ class TestBookedVatInvoiceRounding(BookedVatTestCase):
 				"set_posting_time": 1,
 				"posting_date": POSTING_DATE,
 				"due_date": POSTING_DATE,
+				# Pin currency + pricing explicitly so a bare site (no default
+				# price list / exchange rate) needs no master lookups, and no
+				# round-off account (disabled) is required.
 				"currency": "EUR",
+				"conversion_rate": 1.0,
+				"selling_price_list": _ensure_selling_price_list(),
+				"price_list_currency": "EUR",
+				"plc_conversion_rate": 1.0,
+				"ignore_pricing_rule": 1,
+				"disable_rounded_total": 1,
+				"update_stock": 0,
 				"taxes_and_charges": self.sales_template_21,
 				"items": [
 					{
 						"item_code": item,
 						"qty": 1,
 						"rate": base_net,
+						"price_list_rate": base_net,
 						"income_account": self.income,
 						"cost_center": cost_center,
 					}
@@ -390,6 +421,22 @@ class TestBookedVatInvoiceRounding(BookedVatTestCase):
 		self.assertEqual(decl.get_grid_value("03"), 100.05)
 
 
+def _ensure_leaf(doctype: str, name_field: str, parent_field: str) -> str:
+	"""Return a leaf node of a nested-set master (Item Group / Customer Group /
+	Territory), creating one under the root if the site ships none — a bare CI
+	install has the tree roots but not always the child leaves these tests need."""
+	existing = frappe.db.get_value(doctype, {"is_group": 0}, "name")
+	if existing:
+		return existing
+	fallback = f"BE Test {doctype}"
+	if frappe.db.exists(doctype, fallback):
+		return fallback
+	parent = frappe.db.get_value(doctype, {"is_group": 1}, "name")
+	doc = frappe.get_doc({"doctype": doctype, name_field: fallback, parent_field: parent, "is_group": 0})
+	doc.insert(ignore_permissions=True)
+	return doc.name
+
+
 def _ensure_customer() -> str:
 	name = "BE Test Customer"
 	if frappe.db.exists("Customer", name):
@@ -398,8 +445,8 @@ def _ensure_customer() -> str:
 		{
 			"doctype": "Customer",
 			"customer_name": name,
-			"customer_group": frappe.db.get_value("Customer Group", {"is_group": 0}, "name"),
-			"territory": frappe.db.get_value("Territory", {"is_group": 0}, "name"),
+			"customer_group": _ensure_leaf("Customer Group", "customer_group_name", "parent_customer_group"),
+			"territory": _ensure_leaf("Territory", "territory_name", "parent_territory"),
 		}
 	)
 	customer.flags.ignore_permissions = True
@@ -415,7 +462,7 @@ def _ensure_service_item(income_account: str) -> str:
 		{
 			"doctype": "Item",
 			"item_code": code,
-			"item_group": frappe.db.get_value("Item Group", {"is_group": 0}, "name"),
+			"item_group": _ensure_leaf("Item Group", "item_group_name", "parent_item_group"),
 			"stock_uom": _ensure_uom(),
 			"is_stock_item": 0,
 			"is_sales_item": 1,
