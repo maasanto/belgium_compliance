@@ -174,6 +174,28 @@ class TestTotalFormulas(FrappeTestCase):
 		self.assertEqual(decl.g_72, 0)
 
 
+class TestListViewMeta(FrappeTestCase):
+	"""Regression for issue #22: a DocType whose ``title_field`` points at
+	something that is not a real DocField (e.g. the ``name`` primary key)
+	makes the list view header crash — ``get_docfield`` returns ``None`` and
+	the Subject column dereferences ``.fieldname`` on it. Guard every DocType
+	in the module against reintroducing that.
+	"""
+
+	def test_module_title_fields_resolve_to_real_docfields(self):
+		doctypes = frappe.get_all("DocType", filters={"module": "Belgium Compliance"}, pluck="name")
+		self.assertIn("Belgian VAT Declaration", doctypes)
+		for name in doctypes:
+			meta = frappe.get_meta(name)
+			if not meta.title_field:
+				continue
+			self.assertIsNotNone(
+				meta.get_field(meta.title_field),
+				f"{name}: title_field '{meta.title_field}' is not a DocField — "
+				f"the list view header will crash (issue #22)",
+			)
+
+
 class TestComputeSmoke(FrappeTestCase):
 	"""Compute on an empty period — no invoices, no adjustments, all grids zero."""
 
